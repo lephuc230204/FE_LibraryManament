@@ -1,0 +1,149 @@
+/* Đảm bảo rằng phần tử body và html chiếm toàn bộ màn hình */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
+
+/* Đặt nền tổng thể */
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Chiều cao toàn bộ màn hình */
+    background-color: #f8d6db;
+}
+
+/* Đặt kiểu cho container chính */
+.container {
+    display: flex;
+    width: 1000px; /* Tổng chiều rộng 1000px */
+    height: 680px; /* Tổng chiều cao 680px */
+    background-color: #fff;
+    box-shadow: 0px 0px 30px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Đặt kiểu cho panel bên trái */
+.left-panel {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 500px;
+    height: 680px;
+}
+
+.left-panel img.logo {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+.left-panel h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.left-panel h3 {
+    font-size: 20px;
+    color: #000000;
+    margin-bottom: 20px;
+}
+
+/* Đặt kiểu cho form đăng nhập */
+form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Đặt kiểu cho label Email */
+form label {
+    align-self: flex-start;
+    margin-bottom: 5px;
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 12.1px;
+    text-align: center;
+    width: 33px;
+    height: 13px;
+    position: absolute;
+    top: 303px;
+    left: 52px;
+    opacity: 0.9;
+}
+
+/* Đặt kiểu cho container form input */
+.input-group {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px 40px 10px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.input-group .icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+}
+
+/* Đặt kiểu cho nút đăng nhập */
+button[type="submit"] {
+    background-color: #f8c7d1;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    width: 100%;
+}
+
+button[type="submit"]:hover {
+    background-color: #e5b2bd;
+}
+
+/* Đặt kiểu cho panel bên phải */
+.right-panel {
+    flex: 1;
+    background-color: #f8d6db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 500px;
+    height: 680px;
+}
+
+.right-panel img {
+    width: 80%;
+    max-width: 350px;
+    border-radius: 50%;
+}
+
+/* Đặt kiểu cho thông tin liên hệ */
+.left-panel p {
+    font-size: 12px;
+    color: #999;
+    margin-top: 20px;
+}
