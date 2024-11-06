@@ -1,0 +1,37 @@
+.nav-bar {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 20px;
+}
+
+.logo-container {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.logo {
+  width: 100px;
+  height: auto;
+}
+
+.nav-item {
+  display: flex; /* Sử dụng flexbox để căn chỉnh icon và chữ */
+  align-items: center; /* Căn chỉnh theo chiều dọc */
+  padding: 10px 0;
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+}
+
+.nav-item .icon {
+  font-size: 20px;
+  color: #333;
+  margin-right: 10px; /* Khoảng cách giữa icon và chữ */
+}
+
+/* Tô màu khi active */
+.nav-item.active {
+  color: #007bff;
+  font-weight: bold;
+}
