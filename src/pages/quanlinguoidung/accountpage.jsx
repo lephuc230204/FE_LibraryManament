@@ -81,6 +81,7 @@ const AccountPage = () => {
               <tr>
                 <th>ID</th>
                 <th>Tên</th>
+                <th>Email</th> {/* Thêm cột Email */}
                 <th>Số điện thoại</th>
                 <th>Vai trò</th>
                 <th>Ngày tạo</th>
@@ -93,11 +94,12 @@ const AccountPage = () => {
                 <tr key={index}>
                   <td>{user.id}</td>
                   <td>{user.username}</td>
-                  <td>{user.phone || "N/A"}</td>  {/* Hiển thị "N/A" nếu không có số điện thoại */}
-                  <td>{user.roleName || "N/A"}</td>  {/* Hiển thị vai trò người dùng */}
+                  <td>{user.email || "N/A"}</td>  {/* Hiển thị email */}
+                  <td>{user.phone || "N/A"}</td>  {/* Hiển thị số điện thoại */}
+                  <td>{user.roleName || "N/A"}</td>  {/* Hiển thị vai trò */}
                   <td>{user.createdDate || "N/A"}</td>  {/* Hiển thị ngày tạo */}
-                  <td>{user.dob || "N/A"}</td>  {/* Hiển thị ngày sinh hoặc "N/A" nếu không có */}
-                  <td>{user.status || "N/A"}</td>  {/* Hiển thị trạng thái người dùng */}
+                  <td>{user.dob || "N/A"}</td>  {/* Hiển thị ngày sinh */}
+                  <td>{user.status || "N/A"}</td>  {/* Hiển thị trạng thái */}
                 </tr>
               ))}
             </tbody>
