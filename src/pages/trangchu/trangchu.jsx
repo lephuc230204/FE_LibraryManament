@@ -7,7 +7,7 @@ import illustration from '../../assets/images/illustration.png';  // Import hìn
 function TrangChu() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();  // Hook để chuyển hướng trang
+    const navigate = useNavigate();  // Hook để chuyển hướng
 
     // Hàm xử lý đăng nhập
     const handleLogin = async (e) => {
@@ -26,15 +26,19 @@ function TrangChu() {
         });
     
         const data = await response.json();
-    
+        console.log("Dữ liệu nhận được từ API:", data);  // Log dữ liệu nhận được
+
         if (data.status === 'success') {
-            const token = data.token;
+            const { token, refreshToken } = data; // Lấy cả accessToken và refreshToken
             
             // Lưu token vào localStorage
-            localStorage.setItem('token', token);
-    
+            localStorage.setItem('accessToken', token);
+            localStorage.setItem('refreshToken', refreshToken);
+
             // Giải mã token JWT
             const decodedToken = JSON.parse(atob(token.split('.')[1]));  // Giải mã token JWT
+            console.log("Decoded token:", decodedToken);  // Log giải mã token
+    
             if (decodedToken.role === 'ROLE_ADMIN') {
                 navigate('/quan-ly-nguoi-dung');  // Chuyển hướng đến trang quản lý người dùng
             } else {
