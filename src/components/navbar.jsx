@@ -9,22 +9,40 @@ const NavBar = () => {
       <div className="logo-container">
         <img src={logo} alt="Logo" className="logo" />
       </div>
-      <NavLink to="/account" activeClassName="active" className="nav-item">
-        <i className="fas fa-user icon"></i> Account
+      <NavLink
+        to="/user-management"
+        className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')} // Dùng ternary operator để gán class
+      >
+        <i className="fas fa-user icon"></i> Users
       </NavLink>
-      <NavLink to="/book" activeClassName="active" className="nav-item">
-        <i className="fas fa-book icon"></i> Book
+      <NavLink
+        to="/book-management"
+        className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')}
+      >
+        <i className="fas fa-book icon"></i> Books
       </NavLink>
-      <NavLink to="/extend-book" activeClassName="active" className="nav-item">
-        <i className="fas fa-book-open icon"></i> Extend Book
+      <NavLink
+        to="/extend-book-management"
+        className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')}
+      >
+        <i className="fas fa-book-open icon"></i> Extend Books
       </NavLink>
-      <NavLink to="/reserve-book" activeClassName="active" className="nav-item">
-        <i className="fas fa-bookmark icon"></i> Reserve Book
+      <NavLink
+        to="/reserve-book-management"
+        className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')}
+      >
+        <i className="fas fa-bookmark icon"></i> Reserve Books
       </NavLink>
-      <NavLink to="/borrow-book" activeClassName="active" className="nav-item">
-        <i className="fas fa-hand-holding icon"></i> Borrow Book
+      <NavLink
+        to="/borrow-book-management"
+        className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')}
+      >
+        <i className="fas fa-hand-holding icon"></i> Borrow Books
       </NavLink>
-      <NavLink to="/logout" activeClassName="active" className="nav-item">
+      <NavLink
+        to="/logout"
+        className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')}
+      >
         <i className="fas fa-sign-out-alt icon"></i> Log out
       </NavLink>
     </div>
