@@ -45,11 +45,11 @@ const AccountPage = () => {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
   
-        const data = await response.json();
-        console.log("Dữ liệu đã lấy:", data);
+        const result = await response.json();
+        console.log("Dữ liệu đã lấy:", result);
   
-        // Set userData only if `data` is an array
-        setUserData(Array.isArray(data) ? data : []);
+        // Set userData to result.data if result has the structure { data: [...] }
+        setUserData(Array.isArray(result.data) ? result.data : []);
       } catch (error) {
         console.error('Lỗi khi lấy dữ liệu:', error);
       }
@@ -94,7 +94,7 @@ const AccountPage = () => {
                   <td>{user.email}</td>
                   <td>{user.phone || "N/A"}</td>  {/* Check if phone exists or show "N/A" */}
                   <td>{user.password || "N/A"}</td>  {/* Display "N/A" if password isn't available */}
-                  <td>{user.createdDate || "N/A"}</td>  {/* Use createdDate if dob is null */}
+                  <td>{user.dob || "N/A"}</td>  {/* Use createdDate if dob is null */}
                 </tr>
               ))}
             </tbody>
