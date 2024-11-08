@@ -10,7 +10,7 @@ const NavBar = () => {
         <img src={logo} alt="Logo" className="logo" />
       </div>
       <NavLink
-        to="/user-management"
+        to="/quan-ly-nguoi-dung"
         className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')} // Dùng ternary operator để gán class
       >
         <i className="fas fa-user icon"></i> Users
@@ -22,19 +22,19 @@ const NavBar = () => {
         <i className="fas fa-book icon"></i> Books
       </NavLink>
       <NavLink
-        to="/extend-book-management"
+        to="/quan-ly-gia-han-sach"
         className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')}
       >
         <i className="fas fa-book-open icon"></i> Extend Books
       </NavLink>
       <NavLink
-        to="/reserve-book-management"
+        to="/quan-ly-dat-truoc-sach"
         className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')}
       >
         <i className="fas fa-bookmark icon"></i> Reserve Books
       </NavLink>
       <NavLink
-        to="/borrow-book-management"
+        to="/quan-ly-muon-sach"
         className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')}
       >
         <i className="fas fa-hand-holding icon"></i> Borrow Books
