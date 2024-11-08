@@ -16,7 +16,7 @@ const NavBar = () => {
         <i className="fas fa-user icon"></i> Users
       </NavLink>
       <NavLink
-        to="/book-management"
+        to="/quan-ly-sach"
         className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')}
       >
         <i className="fas fa-book icon"></i> Books
