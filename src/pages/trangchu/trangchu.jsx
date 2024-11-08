@@ -12,7 +12,7 @@ function TrangChu() {
     // Hàm xử lý đăng nhập
     const handleLogin = async (e) => {
         e.preventDefault();
-        
+    
         // Gọi API đăng nhập
         const response = await fetch('http://localhost:8083/api/v1/auth/login', {
             method: 'POST',
@@ -24,13 +24,16 @@ function TrangChu() {
                 password: password
             })
         });
-
+    
         const data = await response.json();
-
+    
         if (data.status === 'success') {
             const token = data.token;
             
-            // Kiểm tra xem token có chứa "ROLE_ADMIN"
+            // Lưu token vào localStorage
+            localStorage.setItem('token', token);
+    
+            // Giải mã token JWT
             const decodedToken = JSON.parse(atob(token.split('.')[1]));  // Giải mã token JWT
             if (decodedToken.role === 'ROLE_ADMIN') {
                 navigate('/quan-ly-nguoi-dung');  // Chuyển hướng đến trang quản lý người dùng
