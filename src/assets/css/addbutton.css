@@ -1,0 +1,18 @@
+.add-button {
+    display: flex;
+    align-items: center;
+    background-color: #f7dada; /* Light pink background */
+    color: #333; /* Dark text color */
+    border: none;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .add-button-icon {
+    margin-right: 5px; /* Space between icon and label */
+    font-size: 16px;
+  }
+  

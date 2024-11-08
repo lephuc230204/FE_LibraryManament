@@ -1,0 +1,28 @@
+.sortby-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 10px 20px;
+  width: 150px;
+}
+
+.sortby-label {
+  position: absolute;
+  top: -10px; 
+  left: 20px; 
+  background-color: white; 
+  color: #333;
+  padding: 0 5px;
+}
+
+.sortby-select {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  text-align: center;
+  appearance: none;
+  background: none;
+  width: 100%;
+}

@@ -5,6 +5,7 @@ import illustration from '../../assets/images/illustration.png';  // Import hìn
 
 function TrangChu() {
     return (
+        <div className="trang-chu-body">
         <div className="container">
             <div className="left-panel">
                 <img src={logo} alt="Logo" className="logo" />  {/* Sử dụng biến logo */}
@@ -30,6 +31,7 @@ function TrangChu() {
             <div className="right-panel">
                 <img src={illustration} alt="Illustration" />  {/* Sử dụng biến illustration */}
             </div>
+        </div>
         </div>
     );
 }

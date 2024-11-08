@@ -1,46 +1,45 @@
-/* SearchBar.css */
-
 .search-bar {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 434px;
-    height: 54px;
-    border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 1);
-    background-color: white;
-    padding: 0 10px; /* Thêm padding để tạo khoảng cách giữa các phần tử */
-}
-
-.search-type {
-    width: 120px;
-    height: 34px;
-    border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 1);
-    background-color: rgba(217, 217, 217, 1);
-    padding-left: 10px;
-    font-size: 14px;
-    appearance: none; /* Tắt mũi tên thả xuống mặc định trên các trình duyệt */
-}
-
-.search-input {
-    width: 240px;
-    height: 34px;
-    border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 1);
-    padding-left: 10px;
-    font-size: 14px;
-}
-
-.search-button {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    width: fit-content;
+    height: 40px; /* Tăng chiều cao */
+  }
+  
+  .search-type {
+    background-color: #ddd; /* Màu nền xám cho nút chọn loại tìm kiếm */
+    border: none;
+    padding:  15px; /* Tăng padding để rộng hơn */
+    font-weight: bold;
+    font-size: 16px; /* Tăng font-size */
+    color: #333;
+    cursor: pointer;
+    outline: none;
+  }
+  
+  .search-input {
+    border: none;
+    outline: none;
+    padding: 10px 15px; /* Tăng padding để rộng hơn */
+    font-size: 16px; /* Tăng font-size */
+    flex: 1;
+    color: #333;
+  }
+  
+  .search-button {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0; /* Xóa padding để căn chỉnh biểu tượng chính xác */
-}
-
-.search-icon {
-    width: 24px;  /* Thay đổi kích thước biểu tượng cho phù hợp */
+    padding: 10px; /* Tăng padding */
+    outline: none;
+    display: flex;
+    align-items: center;
+  }
+  
+  .search-icon {
+    width: 24px; /* Tăng kích thước biểu tượng */
     height: 24px;
-    opacity: 1; /* Đảm bảo biểu tượng được hiển thị */
-}
+  }
+  

@@ -1,13 +1,28 @@
+/* Thanh điều hướng */
 .nav-bar {
+  width: 205px;
+  height: 100vh; /* Đặt chiều cao thanh điều hướng full màn hình */
+  background-color: #f8c7d1;
   display: flex;
   flex-direction: column;
-  position: relative;
-  padding: 20px;
+  align-items: center;
+  padding-top: 20px;
+  gap: 15px;
+  position: fixed; /* Đảm bảo thanh điều hướng cố định ở bên trái */
+  top: 0;
+  left: 0;
+  bottom: 0;
 }
 
+/* Container logo */
 .logo-container {
-  margin-bottom: 20px;
-  text-align: center;
+  width: 91px;
+  height: 75px;
+  margin-top: 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
 }
 
 .logo {
@@ -15,23 +30,46 @@
   height: auto;
 }
 
+/* Mục trong thanh điều hướng */
 .nav-item {
-  display: flex; /* Sử dụng flexbox để căn chỉnh icon và chữ */
-  align-items: center; /* Căn chỉnh theo chiều dọc */
-  padding: 10px 0;
+  width: 161px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  border-radius: 20px;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
   text-decoration: none;
-  color: #333;
-  font-size: 18px;
+  transition: background 0.3s ease;
+  justify-content: flex-start; /* Đảm bảo chữ và icon không bị lệch */
+  gap: 10px; /* Khoảng cách giữa icon và chữ */
 }
 
 .nav-item .icon {
-  font-size: 20px;
-  color: #333;
-  margin-right: 10px; /* Khoảng cách giữa icon và chữ */
+  width: 39px;
+  height: 39px;
+  display: inline-block;
+}
+
+.nav-item:hover {
+  background-color: rgba(122, 112, 112, 0.2);
 }
 
 /* Tô màu khi active */
 .nav-item.active {
-  color: #007bff;
-  font-weight: bold;
+  background-color: rgba(122, 112, 112, 1);
+  color: #fff;
+}
+
+.nav-item.active .icon {
+  filter: brightness(0) invert(1); /* Đổi màu icon khi active */
+}
+
+/* Log out style */
+.nav-item.logout {
+  margin-top: auto;
+  margin-bottom: 20px;
 }
