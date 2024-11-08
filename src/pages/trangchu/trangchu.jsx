@@ -12,60 +12,38 @@ function TrangChu() {
     // Hàm xử lý đăng nhập
     const handleLogin = async (e) => {
         e.preventDefault();
-        
-        try {
-            const response = await fetch('http://localhost:8083/api/v1/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password
-                })
-            });
     
-            const data = await response.json();
+        // Gọi API đăng nhập
+        const response = await fetch('http://localhost:8083/api/v1/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
     
-            if (data.status === 'success') {
-                const { token, refreshToken } = data;
+        const data = await response.json();
     
-                // Lưu accessToken và refreshToken vào localStorage
-                localStorage.setItem('accessToken', token);
-                localStorage.setItem('refreshToken', refreshToken);
+        if (data.status === 'success') {
+            const token = data.token;
+            
+            // Lưu token vào localStorage
+            localStorage.setItem('token', token);
     
-                // Kiểm tra ngay sau khi lưu
-                if (localStorage.getItem('accessToken')) {
-                    console.log('Token đã được lưu thành công');
-                } else {
-                    console.error('Error: No token found');
-                    alert('Lỗi lưu token!');
-                    return;
-                }
-    
-                // Giải mã token JWT để lấy role
-                try {
-                    const decodedToken = JSON.parse(atob(token.split('.')[1]));
-                    if (decodedToken.role === 'ROLE_ADMIN') {
-                        navigate('/quan-ly-nguoi-dung');  // Chuyển hướng đến trang quản lý người dùng
-                    } else {
-                        alert('Bạn không có quyền truy cập vào trang này!');
-                    }
-                } catch (error) {
-                    console.error('Lỗi giải mã token:', error);
-                    alert('Lỗi xác thực người dùng!');
-                }
+            // Giải mã token JWT
+            const decodedToken = JSON.parse(atob(token.split('.')[1]));  // Giải mã token JWT
+            if (decodedToken.role === 'ROLE_ADMIN') {
+                navigate('/quan-ly-nguoi-dung');  // Chuyển hướng đến trang quản lý người dùng
             } else {
-                alert('Đăng nhập không thành công!');
+                alert('Bạn không có quyền truy cập vào trang này!');
             }
-        } catch (error) {
-            console.error('Lỗi kết nối đến API:', error);
-            alert('Không thể kết nối đến máy chủ.');
+        } else {
+            alert('Đăng nhập không thành công!');
         }
     };
-    
-    
-    
 
     return (
         <div className="trang-chu-body">

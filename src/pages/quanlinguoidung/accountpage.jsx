@@ -1,90 +1,64 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import '../../assets/css/accountpage.css';
-
 import NavBar from '../../components/navbar.jsx';
 import SearchBar from '../../components/searchbar.jsx';
 import SortBy from '../../components/sortby.jsx';
 import AddButton from '../../components/addbutton.jsx';
 import { FaUserPlus } from 'react-icons/fa';
+import { jwtDecode } from 'jwt-decode'; // Correct import for jwtDecode
 
 const AccountPage = () => {
-  const [userData, setUserData] = useState([]); // Dữ liệu người dùng
-  const [error, setError] = useState(null); // Trạng thái lỗi
-  const [loading, setLoading] = useState(true); // Trạng thái loading
+  const [userData, setUserData] = useState([]);
 
   useEffect(() => {
     const fetchTableData = async () => {
-      setLoading(true); // Bắt đầu loading
       try {
-        const token = localStorage.getItem('accessToken'); // Lấy token từ localStorage
-        
-        if (!token) {
-          throw new Error('No token found');
+        const token = localStorage.getItem('token');
+        if (token) {
+          try {
+            const decodedToken = jwtDecode(token);
+            console.log('Decoded Token:', decodedToken);
+            if (decodedToken.role !== 'ROLE_ADMIN') {
+              alert('Bạn không có quyền truy cập vào trang này!');
+              return;
+            }
+          } catch (error) {
+            console.error('Lỗi khi giải mã token:', error);
+            return;
+          }
+        } else {
+          console.error('Không tìm thấy token trong localStorage!');
+          return;
         }
-      
-        const response = await axios.get('http://localhost:8083/api/v1/admin/users', {
+  
+        console.log("Đang lấy dữ liệu...");
+        const response = await fetch('http://localhost:8083/api/v1/admin/users', {
+          method: 'GET',
           headers: {
-            'Authorization': `Bearer ${token}`, // Thêm token vào header
-            'Content-Type': 'application/json',
-          },
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         });
-      
-        setUserData(response.data.data);  // Cập nhật dữ liệu
+  
+        if (!response.ok) {
+          console.error(`Lỗi trong phản hồi mạng: ${response.status} - ${response.statusText}`);
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        console.log("Dữ liệu đã lấy:", data);
+  
+        // Set userData only if `data` is an array
+        setUserData(Array.isArray(data) ? data : []);
       } catch (error) {
-        setError(error.message || 'Error fetching data'); // Xử lý lỗi
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false); // Kết thúc loading
+        console.error('Lỗi khi lấy dữ liệu:', error);
       }
     };
-    
+  
     fetchTableData();
   }, []);
+  
 
-  // Nếu đang loading, hiển thị loader
-  if (loading) {
-    return (
-      <div className="account-page">
-        <div className="account-page-container">
-          <NavBar />
-          <div className="main-content">
-            <p>Loading...</p> {/* Hiển thị loading */}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Nếu có lỗi, hiển thị thông báo lỗi
-  if (error) {
-    return (
-      <div className="account-page">
-        <div className="account-page-container">
-          <NavBar />
-          <div className="main-content">
-            <p className="error-message">{`Error: ${error}`}</p> {/* Hiển thị thông báo lỗi */}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Nếu không có dữ liệu
-  if (userData.length === 0) {
-    return (
-      <div className="account-page">
-        <div className="account-page-container">
-          <NavBar />
-          <div className="main-content">
-            <p>No user data available</p> {/* Thông báo nếu không có dữ liệu người dùng */}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // Hiển thị bảng nếu có dữ liệu
   return (
     <div className="account-page">
       <div className="account-page-container">
@@ -96,29 +70,31 @@ const AccountPage = () => {
               <SortBy />
             </div>
             <div className="add-button">
-              <AddButton label="Add member" Icon={FaUserPlus} />
+              <AddButton label="ADD MEMBER" Icon={FaUserPlus} />
             </div>
           </div>
           <table className="account-table">
             <thead>
               <tr>
-                <th>Name</th>
+                <th>Tên</th>
                 <th>ID</th>
+                <th>CardID</th>
                 <th>Email</th>
-                <th>Phone</th>
-                <th>Role</th>
-                <th>Created Date</th>
+                <th>Số điện thoại</th>
+                <th>Mật khẩu</th>
+                <th>Ngày sinh</th>
               </tr>
             </thead>
             <tbody>
               {userData.map((user, index) => (
                 <tr key={index}>
-                  <td>{user.username || 'N/A'}</td>
-                  <td>{user.id || 'N/A'}</td>
-                  <td>{user.email || 'N/A'}</td>
-                  <td>{user.phone || 'N/A'}</td>
-                  <td>{user.roleName || 'N/A'}</td>
-                  <td>{user.createdDate ? new Date(user.createdDate).toLocaleDateString() : 'N/A'}</td>
+                  <td>{user.username}</td>
+                  <td>{user.id}</td>
+                  <td>{user.cardID || "N/A"}</td> {/* Check if cardID exists or show "N/A" */}
+                  <td>{user.email}</td>
+                  <td>{user.phone || "N/A"}</td>  {/* Check if phone exists or show "N/A" */}
+                  <td>{user.password || "N/A"}</td>  {/* Display "N/A" if password isn't available */}
+                  <td>{user.createdDate || "N/A"}</td>  {/* Use createdDate if dob is null */}
                 </tr>
               ))}
             </tbody>
