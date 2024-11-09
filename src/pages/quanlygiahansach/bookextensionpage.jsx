@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import '../../assets/css/borrowingpage.css';
+import '../../assets/css/booklendingpage.css';
 import NavBar from '../../components/navbar.jsx';
 import SearchBar from '../../components/searchbar.jsx';
 import SortBy from '../../components/sortby.jsx';
 import AddButton from '../../components/addbutton.jsx';
-import {FaBook,} from 'react-icons/fa';
-import { jwtDecode } from 'jwt-decode'; // Correct import for jwtDecode
+import {FaBook, FaUserPlus} from 'react-icons/fa'; // Biểu tượng thêm yêu cầu
+import { jwtDecode } from 'jwt-decode'; // Đảm bảo jwtDecode được import chính xác
 
-const BookBorrowingPage = () => {
-    const [borrowingData, setBorrowingData] = useState([]);
+const BookExtensionPage = () => {
+    const [BookExtensionData, setBookExtensionData] = useState([]);
 
     useEffect(() => {
-        const fetchBorrowingData = async () => {
+        const fetchBookExtensionData = async () => {
           try {
             const token = localStorage.getItem('accessToken');  // Lấy accessToken
             if (token) {
@@ -32,7 +32,7 @@ const BookBorrowingPage = () => {
             }
     
             console.log("Đang lấy dữ liệu...");
-            const response = await fetch('http://localhost:8083/api/v1/admin/book-lending/getall', {
+            const response = await fetch('http://localhost:8083/api/v1/admin/book-renewal/getall', {
               method: 'GET',
               headers: {
                 'Authorization': `Bearer ${token}`,
@@ -50,21 +50,22 @@ const BookBorrowingPage = () => {
     
             // Kiểm tra nếu có dữ liệu trong 'data'
             if (result.data) {
-                setBorrowingData(result.data); // Set dữ liệu từ trường 'data'
+                setBookExtensionData(result.data); // Set dữ liệu từ trường 'data'
             } else {
-                setBorrowingData([]); // Trường hợp không có dữ liệu
+                setBookExtensionData([]); // Trường hợp không có dữ liệu
             }
           } catch (error) {
             console.error('Lỗi khi lấy dữ liệu:', error);
           }
         };
     
-        fetchBorrowingData();
+        fetchBookExtensionData();
     }, []);
 
+
     return (
-        <div className="borrowing-page">
-            <div className="borrowing-page-container">
+        <div className="book-lending-page">
+            <div className="book-lending-page-container">
                 <NavBar />
                 <div className="main-content">
                     <div className="top-bar">
@@ -76,29 +77,24 @@ const BookBorrowingPage = () => {
                             <AddButton label="ADD REQUEST" Icon={FaBook} />
                         </div>
                     </div>
-                    <table className="borrowing-table">
+                    <table className="book-lending-table">
                         <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Book ID</th>
-                            <th>User</th>
-                            <th>Staff</th>
-                            <th>Due Date</th>
-                            <th>Return Date</th>
-                            <th>Creation Date</th>
+                            <th>RenewalId</th>
+                            <th>LendinngId</th>
+                            <th>BookName</th>
+                            <th>Renewal Date</th>
+                            <th>Status</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {borrowingData.map((bookBorrow, index) =>  (
+                        {BookExtensionData.map((extension, index) => (
                             <tr key={index}>
-                                <td>{bookBorrow.lendingId}</td>
-                                <td>{bookBorrow.bookId}</td>
-                                <td>{bookBorrow.userid}</td>
-                                <td>{bookBorrow.staffid}</td>
-                                <td>{bookBorrow.dueDate}</td>
-                                <td>{bookBorrow.returnDate || "N/A"}</td>
-                                <td>{bookBorrow.creationDate}</td>
-
+                                <td>{extension.id}</td>
+                                <td>{extension.bookLendingId || "N/A"}</td>
+                                <td>{extension.bookName}</td>
+                                <td>{extension.renewalDate || "N/A"}</td>
+                                <td>{extension.status || "N/A"}</td>
                             </tr>
                         ))}
                         </tbody>
@@ -109,4 +105,4 @@ const BookBorrowingPage = () => {
     );
 };
 
-export default BookBorrowingPage;
+export default BookExtensionPage;

@@ -45,11 +45,15 @@ const BookPage = () => {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
 
-                const data = await response.json();
-                console.log("Dữ liệu sách đã lấy:", data);
+                const result = await response.json();
+                console.log("Dữ liệu đã lấy:", result);
 
-                // Set bookData only if `data` is an array
-                setBookData(Array.isArray(data) ? data : []);
+                // Kiểm tra nếu có dữ liệu trong 'data'
+                if (result.data) {
+                    setBookData(result.data); // Set dữ liệu từ trường 'data'
+                } else {
+                    setBookData([]); // Trường hợp không có dữ liệu
+                }
             } catch (error) {
                 console.error('Lỗi khi lấy dữ liệu sách:', error);
             }
@@ -80,23 +84,28 @@ const BookPage = () => {
                             <th>ID</th>
                             <th>Book Name</th>
                             <th>Category</th>
-                            <th>Posting Date</th>
                             <th>Crack</th>
                             <th>Publisher</th>
+                            <th>Author</th>
                             <th>Current Quantity</th>
+                            <th>Quantity</th>
+                            <th>PostingDate</th>
                         </tr>
                         </thead>
                         <tbody>
                         {bookData.map((book, index) => (
                             <tr key={index}>
                                 <td>{book.image || "N/A"}</td>
-                                <td>{book.id}</td>
-                                <td>{book.name}</td>
+                                <td>{book.bookId}</td>
+                                <td>{book.bookName}</td>
                                 <td>{book.category || "N/A"}</td>
-                                <td>{book.postingDate || "N/A"}</td>
                                 <td>{book.crack || "N/A"}</td>
                                 <td>{book.publisher || "N/A"}</td>
+                                <td>{book.author ||"N/A"}</td>
                                 <td>{book.currentQuantity || "N/A"}</td>
+                                <td>{book.quantity || "N/A"}</td>
+                                <td>{book.postingDate || "N/A"}</td>
+
                             </tr>
                         ))}
                         </tbody>

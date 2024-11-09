@@ -4,7 +4,7 @@ import NavBar from '../../components/navbar.jsx';
 import SearchBar from '../../components/searchbar.jsx';
 import SortBy from '../../components/sortby.jsx';
 import AddButton from '../../components/addbutton.jsx';
-import {FaBook, FaUserPlus} from 'react-icons/fa'; // Biểu tượng thêm yêu cầu
+import {FaBook } from 'react-icons/fa'; // Biểu tượng thêm yêu cầu
 import { jwtDecode } from 'jwt-decode'; // Đảm bảo jwtDecode được import chính xác
 
 const BookReservationPage = () => {
@@ -32,7 +32,7 @@ const BookReservationPage = () => {
                 }
 
                 console.log("Đang lấy dữ liệu đặt trước sách...");
-                const response = await fetch('http://localhost:8083/api/v1/admin/book-reservation', {
+                const response = await fetch('http://localhost:8083/api/v1/admin/book-reservations', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -45,10 +45,15 @@ const BookReservationPage = () => {
                     throw new Error(`HTTP error! Status: ${response.status}`);
                 }
 
-                const data = await response.json();
-                console.log("Dữ liệu đặt trước sách đã lấy:", data);
-
-                setReservationData(Array.isArray(data) ? data : []);
+                const result = await response.json();
+                console.log("Dữ liệu đã lấy:", result);
+        
+                // Kiểm tra nếu có dữ liệu trong 'data'
+                if (result.data) {
+                    setReservationData(result.data); // Set dữ liệu từ trường 'data'
+                } else {
+                    setReservationData([]); // Trường hợp không có dữ liệu
+                }
             } catch (error) {
                 console.error('Lỗi khi lấy dữ liệu đặt trước sách:', error);
             }
@@ -75,23 +80,24 @@ const BookReservationPage = () => {
                     <table className="book-reservation-table">
                         <thead>
                         <tr>
-                            <th>Name</th>
                             <th>Reservation ID</th>
-                            <th>Creation Date</th>
                             <th>User</th>
+                            <th>Book</th>
                             <th>Status</th>
+                            <th>Creation Date</th>
+
                         </tr>
                         </thead>
                         <tbody>
-                        {reservationData.map((reservation, index) => (
-                            <tr key={index}>
-                                <td>{reservation.name}</td>
-                                <td>{reservation.reservationId}</td>
-                                <td>{reservation.creationDate || "N/A"}</td>
-                                <td>{reservation.user || "N/A"}</td>
-                                <td>{reservation.status || "N/A"}</td>
-                            </tr>
-                        ))}
+                            {reservationData.map((reservation, index) => (
+                                <tr key={index}>
+                                    <td>{reservation.reservationId}</td>
+                                    <td>{reservation.email || "N/A"}</td> {/* Adjusted to display email */}
+                                    <td>{reservation.bookId}</td>
+                                    <td>{reservation.status || "N/A"}</td>
+                                    <td>{reservation.creationDate || "N/A"}</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
