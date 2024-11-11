@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import CloseButton from '../components/closebutton.jsx' // Import CloseButton
-import '../assets/css/bookform.css';
+import CloseButton from './closebutton.jsx' // Import CloseButton
+import '../assets/css/createbookform.css';
 
-const BookForm = ({ onClose }) => {
+const CreateBookForm = ({ onClose }) => {
   const [formData, setFormData] = useState({
     bookName: '',
     image: null,
     quantity: '1',
-    currentQuantity: '1',
     categoryName: '',
     authorName: '',
     publisher: '',
@@ -31,7 +30,6 @@ const BookForm = ({ onClose }) => {
     bookFormData.append('bookName', formData.bookName);
     bookFormData.append('image', formData.image);
     bookFormData.append('quantity', formData.quantity);
-    bookFormData.append('currentQuantity', formData.currentQuantity);
     bookFormData.append('categoryName', formData.categoryName);
     bookFormData.append('authorName', formData.authorName);
     bookFormData.append('publisher', formData.publisher);
@@ -70,11 +68,7 @@ const BookForm = ({ onClose }) => {
         </label>
         <label>
           Quantity:
-          <input type="number" name="quantity" min= "1" value={formData.quantity} onChange={handleChange} required />
-        </label>
-        <label>
-          Current Quantity:
-          <input type="number" name="currentQuantity" min= "1" value={formData.currentQuantity} onChange={handleChange} required />
+          <input type="number" name="quantity" min="1" value={formData.quantity} onChange={handleChange} required />
         </label>
         <label>
           Category:
@@ -90,13 +84,15 @@ const BookForm = ({ onClose }) => {
         </label>
         <label>
           Crack ID:
-          <input type="number" name="crackId" min= "1" value={formData.crackId} onChange={handleChange} required />
+          <input type="number" name="crackId" min="1" value={formData.crackId} onChange={handleChange} required />
         </label>
-        <button type="submit">Add Book</button>
+        <div className="button-container">
+          <button type="submit">Add Book</button>
+        </div>
       </form>
       <CloseButton onClick={onClose} />
     </div>
   );
 };
 
-export default BookForm;
+export default CreateBookForm;

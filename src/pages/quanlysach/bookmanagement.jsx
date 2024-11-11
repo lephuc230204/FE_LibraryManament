@@ -7,13 +7,15 @@ import AddButton from '../../components/addbutton.jsx';
 import EditButton from '../../components/editbutton.jsx';
 import DeleteButton from '../../components/deletebutton.jsx';
 import { FaBook } from 'react-icons/fa';
-import { jwtDecode } from 'jwt-decode'; // Correct import for jwtDecode
-import BookForm from '../../components/bookform.jsx';
+import CreateBookForm from '../../components/createbookform.jsx';
+import EditBookForm from '../../components/editbookform.jsx';
 
 const BookPage = () => {
     const [bookData, setBookData] = useState([]);
     const [showBookForm, setShowBookForm] = useState(false);
     const [selectedImage, setSelectedImage] = useState(null); // State to hold the selected image for modal
+    const [showEditForm, setShowEditForm] = useState(false);  // New state to control Edit form visibility
+    const [selectedBookId, setSelectedBookId] = useState(null);
 
     const toggleBookForm = () => setShowBookForm(!showBookForm);
 
@@ -22,12 +24,6 @@ const BookPage = () => {
             const token = localStorage.getItem('token');
             if (!token) {
                 console.error('Token không tìm thấy!');
-                return;
-            }
-
-            const decodedToken = jwtDecode(token);
-            if (decodedToken.role !== 'ROLE_ADMIN') {
-                alert('Bạn không có quyền truy cập vào trang này!');
                 return;
             }
 
@@ -41,6 +37,7 @@ const BookPage = () => {
 
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
             const result = await response.json();
+            console.log("Dữ liệu đã lấy:", result);
             setBookData(result.data || []);
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu sách:', error);
@@ -58,6 +55,10 @@ const BookPage = () => {
 
     const closeModal = () => {
         setSelectedImage(null); // Close the modal by setting selectedImage to null
+    };
+    const handleEditClick = (bookId) => {
+        setSelectedBookId(bookId);  // Set the selected bookId
+        setShowEditForm(true);       // Show the EditBookForm
     };
 
     return (
@@ -115,11 +116,11 @@ const BookPage = () => {
                                     <td>{book.quantity || "N/A"}</td>
                                     <td>{book.postingDate || "N/A"}</td>
                                     <td>
-                                    <div className="action-buttons">
-                                        <EditButton label="EDIT" />
-                                        <DeleteButton label="DELETE" />
-                                    </div>
-                                </td>
+                                        <div className="action-buttons">
+                                            <EditButton label="EDIT" onClick={() => handleEditClick(book.bookId)} /> {/* Pass bookId on Edit click */}
+                                            <DeleteButton label="DELETE" />
+                                        </div>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
@@ -138,7 +139,15 @@ const BookPage = () => {
             {showBookForm && (
                 <div className="modal">
                     <div className="modal-content">
-                        <BookForm onClose={toggleBookForm} refreshBooks={fetchBooks} /> {/* AddBook form */}
+                        <CreateBookForm onClose={toggleBookForm} refreshBooks={fetchBooks} /> {/* AddBook form */}
+                    </div>
+                </div>
+            )}
+
+            {showEditForm && selectedBookId && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <EditBookForm onClose={() => setShowEditForm(false)} bookId={selectedBookId} />
                     </div>
                 </div>
             )}

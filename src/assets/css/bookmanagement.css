@@ -79,10 +79,12 @@
 }
 
 .modal-content {
-    background-color: #fff;
+    background-color: #f7dada;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 10px;
     position: relative;
+    border: 1px solid #050505;
+
 }
 
 .modal-image {

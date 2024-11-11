@@ -56,13 +56,13 @@ const NavBar = () => {
       >
         <i className="fas fa-hand-holding icon"></i> Borrow Books
       </NavLink>
-      <NavLink
-        to="#"
-        className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')}
+      <div
+        className="nav-item logout-button" // Gán class giống các mục khác
         onClick={handleLogout} // Gọi hàm handleLogout khi nhấn Logout
       >
         <i className="fas fa-sign-out-alt icon"></i> Log out
-      </NavLink>
+      </div>
+
     </div>
   );
 };

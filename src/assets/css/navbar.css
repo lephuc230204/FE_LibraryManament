@@ -31,11 +31,12 @@
 }
 
 /* Mục trong thanh điều hướng */
-.nav-item {
+.nav-item,
+.logout-button {
   width: 161px;
   height: 58px;
   display: flex;
-  align-items: center;
+  align-items: center; /* Căn giữa nội dung theo chiều dọc */
   padding-left: 20px;
   border-radius: 20px;
   font-size: 20px;
@@ -48,28 +49,67 @@
   gap: 10px; /* Khoảng cách giữa icon và chữ */
 }
 
-.nav-item .icon {
+/* Icon trong thanh điều hướng */
+.nav-item .icon,
+.logout-button .icon {
   width: 39px;
   height: 39px;
   display: inline-block;
 }
 
-.nav-item:hover {
+/* Hiệu ứng hover cho các mục trong thanh điều hướng */
+.nav-item:hover,
+.logout-button:hover {
   background-color: rgba(122, 112, 112, 0.2);
 }
 
 /* Tô màu khi active */
-.nav-item.active {
+.nav-item.active,
+.logout-button.active {
   background-color: rgba(122, 112, 112, 1);
   color: #fff;
 }
 
-.nav-item.active .icon {
+.nav-item.active .icon,
+.logout-button.active .icon {
   filter: brightness(0) invert(1); /* Đổi màu icon khi active */
 }
 
-/* Log out style */
-.nav-item.logout {
-  margin-top: auto;
-  margin-bottom: 20px;
+/* Logout button với kiểu dáng giống các item khác */
+.logout-button {
+  width: 161px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  border-radius: 20px;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background 0.3s ease;
+  justify-content: flex-start;
+  gap: 10px; /* Khoảng cách giữa icon và chữ */
+  background-color: transparent; /* Đảm bảo màu nền mặc định */
+}
+
+.logout-button .icon {
+  width: 39px;
+  height: 39px;
+  display: inline-block;
+}
+
+/* Hiệu ứng hover và active cho logout */
+.logout-button:hover {
+  background-color: rgba(122, 112, 112, 0.2);
+}
+
+.logout-button.active {
+  background-color: rgba(122, 112, 112, 1);
+  color: #fff;
+}
+
+.logout-button.active .icon {
+  filter: brightness(0) invert(1); /* Đổi màu icon khi active */
 }
