@@ -1,7 +1,7 @@
 import React from 'react';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import TrangChu from './pages/trangchu/trangchu.jsx';
+import LogIn from './pages/login/login.jsx';
 import QuanLyNguoiDung from './pages/quanlinguoidung/accountpage.jsx';
 import './App.css';
 import BookManagement from "./pages/quanlysach/bookmanagement"
@@ -13,7 +13,7 @@ function App() {
         <Router>
             <Routes>
                 {/* Trang chủ */}
-                <Route path="/" element={<TrangChu/>}/>
+                <Route path="/" element={<LogIn/>}/>
                 {/* Trang quản lý người dùng */}
                 <Route path="/quan-ly-nguoi-dung" element={<QuanLyNguoiDung/>}/>
                 {/* trang quản lý sach */}

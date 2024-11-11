@@ -1,9 +1,26 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';  // Sử dụng useNavigate thay vì useHistory
+import AuthService from '../services/AuthService';
 import '../assets/css/navbar.css';
-import logo from '../assets/images/logo.png'; // Đường dẫn đến hình ảnh logo của bạn
+import logo from '../assets/images/logo.png';
 
 const NavBar = () => {
+  const navigate = useNavigate(); 
+
+  // Hàm logout
+  const handleLogout = async () => {
+    try {
+      await AuthService.logout(); // Gọi service logout
+
+      // Xóa token và chuyển hướng sau khi logout thành công
+      localStorage.removeItem('accessToken');
+      navigate('/'); // Chuyển hướng về LOGIN sau khi logout
+      console.log('Logged out successfully');
+    } catch (error) {
+      console.error('Logout failed:', error.message);
+    }
+  };
+
   return (
     <div className="nav-bar">
       <div className="logo-container">
@@ -11,7 +28,7 @@ const NavBar = () => {
       </div>
       <NavLink
         to="/quan-ly-nguoi-dung"
-        className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')} // Dùng ternary operator để gán class
+        className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')}
       >
         <i className="fas fa-user icon"></i> Users
       </NavLink>
@@ -40,8 +57,9 @@ const NavBar = () => {
         <i className="fas fa-hand-holding icon"></i> Borrow Books
       </NavLink>
       <NavLink
-        to="/logout"
+        to="#"
         className={({ isActive }) => (isActive ? 'active nav-item' : 'nav-item')}
+        onClick={handleLogout} // Gọi hàm handleLogout khi nhấn Logout
       >
         <i className="fas fa-sign-out-alt icon"></i> Log out
       </NavLink>
