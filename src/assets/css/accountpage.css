@@ -58,4 +58,10 @@
     text-align: center;
     border-bottom: 1px solid #ddd;
   }
-  
+  /* Styles for the button container */
+.action-buttons {
+  display: flex;
+  gap: 10px; /* Adjusts the spacing between buttons */
+  justify-content: center;
+  align-items: center;
+}

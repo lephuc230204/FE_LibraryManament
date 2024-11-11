@@ -1,0 +1,15 @@
+.delete-button {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Căn chữ giữa theo chiều ngang */
+    background-color: rgb(250, 6, 6); /* Màu nền đỏ nhạt */
+    color: #333; /* Màu chữ đậm */
+    border: none;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100px;
+    height: 40px;
+}

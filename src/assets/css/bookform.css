@@ -1,0 +1,67 @@
+.book-form {
+  background-color: #F5F5F5;
+  padding: 15px; /* Giảm padding để form nhỏ hơn */
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 300px; /* Giảm chiều rộng để form không quá rộng */
+  font-family: Arial, sans-serif;
+  font-size: 14px; /* Giảm kích thước font để chữ nhỏ hơn */
+}
+
+.book-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 14px; /* Giảm kích thước font cho label */
+}
+
+.book-form input[type="text"],
+.book-form input[type="number"],
+.book-form input[type="file"] {
+  width: 100%;
+  padding: 8px; /* Giảm padding của input để form nhỏ gọn hơn */
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin-bottom: 12px; /* Giảm khoảng cách giữa các input */
+  font-size: 14px; /* Giảm kích thước chữ trong input */
+}
+
+.book-form button {
+  background-color: #008CBA;
+  color: white;
+  padding: 8px 16px; /* Giảm padding của button để nút nhỏ hơn */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-right: 8px; /* Giảm khoảng cách bên phải của button */
+  font-size: 14px; /* Giảm kích thước chữ trong button */
+}
+
+.book-form button:hover {
+  background-color: #006494;
+}
+
+.book-form button:disabled {
+  background-color: #ddd;
+  cursor: default;
+}
+
+.book-form .close-button {
+  background-color: #f44336;
+  color: white;
+  padding: 8px 16px; /* Giảm padding của nút close */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px; /* Giảm kích thước chữ trong nút close */
+}
+
+.book-form .close-button:hover {
+  background-color: #d32f2f;
+}
+
+.book-form .close-button:disabled {
+  background-color: #ddd;
+  cursor: default;
+}

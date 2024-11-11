@@ -56,30 +56,34 @@ function TrangChu() {
                     <img src={logo} alt="Logo" className="logo" />
                     <h2>Welcome to</h2>
                     <h3>Sign in</h3>
-                    <form onSubmit={handleLogin}>
+                    <form onSubmit={handleLogin} className="login-form">
                         <div className="input-group">
-                            <label>Email*</label>
+                            <label htmlFor="email" className="email-label">Email*</label>
                             <input 
+                                id="email"
                                 type="email" 
                                 placeholder="Admin@gmail.com" 
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)} 
+                                className="email-input"
                             />
                             <span className="icon">👤</span>
                         </div>
 
                         <div className="input-group">
-                            <label>Password*</label>
+                            <label htmlFor="password" className="password-label"></label>
                             <input 
+                                id="password"
                                 type="password" 
                                 placeholder="Password" 
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)} 
+                                className="password-input"
                             />
                             <span className="icon">🔒</span>
                         </div>
 
-                        <button type="submit">SIGN IN</button>
+                        <button type="submit" className="submit-btn">SIGN IN</button>
                     </form>
                     <p>Rimberbookstore@gmail.com</p>
                 </div>

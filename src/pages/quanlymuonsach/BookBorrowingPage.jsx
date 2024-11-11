@@ -4,6 +4,8 @@ import NavBar from '../../components/navbar.jsx';
 import SearchBar from '../../components/searchbar.jsx';
 import SortBy from '../../components/sortby.jsx';
 import AddButton from '../../components/addbutton.jsx';
+import EditButton from '../../components/editbutton.jsx';
+import DeleteButton from '../../components/deletebutton.jsx';
 import {FaBook,} from 'react-icons/fa';
 import { jwtDecode } from 'jwt-decode'; // Correct import for jwtDecode
 
@@ -86,6 +88,8 @@ const BookBorrowingPage = () => {
                             <th>Due Date</th>
                             <th>Return Date</th>
                             <th>Creation Date</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -98,7 +102,12 @@ const BookBorrowingPage = () => {
                                 <td>{bookBorrow.dueDate}</td>
                                 <td>{bookBorrow.returnDate || "N/A"}</td>
                                 <td>{bookBorrow.creationDate}</td>
-
+                                <td>
+                                    <div className="action-buttons">
+                                        <EditButton label="EDIT" />
+                                        <DeleteButton label="DELETE" />
+                                    </div>
+                                </td>
                             </tr>
                         ))}
                         </tbody>

@@ -6,6 +6,8 @@ import SortBy from '../../components/sortby.jsx';
 import AddButton from '../../components/addbutton.jsx';
 import { FaUserPlus } from 'react-icons/fa';
 import { jwtDecode } from 'jwt-decode'; // Correct import for jwtDecode
+import DeleteButton from '../../components/deletebutton.jsx';
+import EditButton from '../../components/editbutton.jsx';
 
 const AccountPage = () => {
   const [userData, setUserData] = useState([]);
@@ -87,6 +89,8 @@ const AccountPage = () => {
                 <th>Ngày tạo</th>
                 <th>Ngày sinh</th>
                 <th>Trạng thái</th>
+                <th></th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -100,6 +104,12 @@ const AccountPage = () => {
                   <td>{user.createdDate || "N/A"}</td>  {/* Hiển thị ngày tạo */}
                   <td>{user.dob || "N/A"}</td>  {/* Hiển thị ngày sinh */}
                   <td>{user.status || "N/A"}</td>  {/* Hiển thị trạng thái */}
+                  <td>
+                    <div className="action-buttons">
+                      <EditButton label="EDIT" />
+                      <DeleteButton label="DELETE" />
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

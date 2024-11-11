@@ -1,0 +1,22 @@
+.close-button {
+    position: absolute;
+    top: 10px;  /* Căn cách từ phía trên */
+    right: 10px;  /* Căn cách từ phía phải */
+    background-color: transparent;
+    border: none;
+    color: #333;
+    font-size: 24px;  /* Cỡ chữ lớn để hiển thị dấu "X" */
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    z-index: 1000;  /* Đảm bảo nút luôn hiển thị trên các phần tử khác */
+  }
+  
+  .close-button:hover {
+    color: #ff0000;  /* Đổi màu khi hover */
+  }
+  
+  .close-button:focus {
+    outline: none;  /* Loại bỏ outline khi chọn nút */
+  }
+  

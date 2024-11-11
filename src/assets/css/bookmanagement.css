@@ -58,3 +58,40 @@
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
+/* Book Image Styling */
+.book-table img {
+    width: 100px; /* Set width of image */
+    height: 100px; /* Set height of image */
+    object-fit: cover; /* Ensures the image covers the container without distortion */
+}
+/* Modal Styling for Image */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 80vh; /* Ensure the image is not too large */
+    object-fit: contain;
+}
+
+.modal-content img {
+    width: 100%;
+    height: auto;
+}

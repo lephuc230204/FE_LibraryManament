@@ -4,7 +4,9 @@ import NavBar from '../../components/navbar.jsx';
 import SearchBar from '../../components/searchbar.jsx';
 import SortBy from '../../components/sortby.jsx';
 import AddButton from '../../components/addbutton.jsx';
-import {FaBook, FaUserPlus} from 'react-icons/fa'; // Biểu tượng thêm yêu cầu
+import EditButton from '../../components/editbutton.jsx';
+import DeleteButton from '../../components/deletebutton.jsx';
+import {FaBook} from 'react-icons/fa'; // Biểu tượng thêm yêu cầu
 import { jwtDecode } from 'jwt-decode'; // Đảm bảo jwtDecode được import chính xác
 
 const BookExtensionPage = () => {
@@ -85,6 +87,8 @@ const BookExtensionPage = () => {
                             <th>BookName</th>
                             <th>Renewal Date</th>
                             <th>Status</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -95,6 +99,12 @@ const BookExtensionPage = () => {
                                 <td>{extension.bookName}</td>
                                 <td>{extension.renewalDate || "N/A"}</td>
                                 <td>{extension.status || "N/A"}</td>
+                                <td>
+                                    <div className="action-buttons">
+                                        <EditButton label="EDIT" />
+                                        <DeleteButton label="DELETE" />
+                                    </div>
+                                </td>
                             </tr>
                         ))}
                         </tbody>

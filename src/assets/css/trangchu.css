@@ -1,4 +1,4 @@
-html, body  {
+html, body {
     margin: 0;
     padding: 0;
     height: 100%;
@@ -57,7 +57,7 @@ html, body  {
 }
 
 /* Đặt kiểu cho form đăng nhập */
-form {
+form.login-form {
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -65,7 +65,7 @@ form {
 }
 
 /* Đặt kiểu cho label Email */
-form label {
+form .email-label {
     align-self: flex-start;
     margin-bottom: 5px;
     font-family: 'Inter', sans-serif;
@@ -106,7 +106,7 @@ form label {
 }
 
 /* Đặt kiểu cho nút đăng nhập */
-button[type="submit"] {
+button.submit-btn {
     background-color: #f8c7d1;
     color: #fff;
     border: none;
@@ -119,7 +119,7 @@ button[type="submit"] {
     width: 100%;
 }
 
-button[type="submit"]:hover {
+button.submit-btn:hover {
     background-color: #e5b2bd;
 }
 

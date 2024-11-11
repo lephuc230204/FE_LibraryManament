@@ -4,6 +4,9 @@ import NavBar from '../../components/navbar.jsx';
 import SearchBar from '../../components/searchbar.jsx';
 import SortBy from '../../components/sortby.jsx';
 import AddButton from '../../components/addbutton.jsx';
+import EditButton from '../../components/editbutton.jsx';
+import DeleteButton from '../../components/deletebutton.jsx';
+
 import {FaBook } from 'react-icons/fa'; // Biểu tượng thêm yêu cầu
 import { jwtDecode } from 'jwt-decode'; // Đảm bảo jwtDecode được import chính xác
 
@@ -85,7 +88,8 @@ const BookReservationPage = () => {
                             <th>Book</th>
                             <th>Status</th>
                             <th>Creation Date</th>
-
+                            <th></th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -96,6 +100,12 @@ const BookReservationPage = () => {
                                     <td>{reservation.bookId}</td>
                                     <td>{reservation.status || "N/A"}</td>
                                     <td>{reservation.creationDate || "N/A"}</td>
+                                    <td>
+                                        <div className="action-buttons">
+                                            <EditButton label="EDIT" />
+                                            <DeleteButton label="DELETE" />
+                                        </div>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
