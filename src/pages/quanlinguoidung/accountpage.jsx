@@ -5,30 +5,18 @@ import SearchBar from '../../components/searchbar.jsx';
 import SortBy from '../../components/sortby.jsx';
 import AddButton from '../../components/addbutton.jsx';
 import { FaUserPlus } from 'react-icons/fa';
-import { jwtDecode } from 'jwt-decode'; // Correct import for jwtDecode
 import DeleteButton from '../../components/deletebutton.jsx';
 import EditButton from '../../components/editbutton.jsx';
+import CreateUserForm from '../../components/createuserform.jsx'; // Import the form component
 
 const AccountPage = () => {
   const [userData, setUserData] = useState([]);
+  const [showCreateForm, setShowCreateForm] = useState(false); // State to control the form visibility
 
   useEffect(() => {
     const fetchTableData = async () => {
       try {
         const token = localStorage.getItem('accessToken');  // Lấy accessToken
-        if (token) {
-          try {
-            const decodedToken = jwtDecode(token);
-            console.log('Decoded Token:', decodedToken);
-          } catch (error) {
-            console.error('Lỗi khi giải mã token:', error);
-            return;
-          }
-        } else {
-          console.error('Không tìm thấy token trong localStorage!');
-          return;
-        }
-
         console.log("Đang lấy dữ liệu...");
         const response = await fetch('http://localhost:8083/api/v1/admin/users', {
           method: 'GET',
@@ -60,6 +48,34 @@ const AccountPage = () => {
     fetchTableData();
   }, []);
 
+  // Function to toggle form visibility
+  const toggleCreateForm = () => {
+    setShowCreateForm(prevState => !prevState); // Toggle the form visibility
+  };
+
+  // Function to refresh user list after creating a new user
+  const refreshUserList = async () => {
+    const token = localStorage.getItem('accessToken');
+    try {
+      const response = await fetch('http://localhost:8083/api/v1/admin/users', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const result = await response.json();
+      if (result.data) {
+        setUserData(result.data);
+      } else {
+        setUserData([]);
+      }
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
   return (
     <div className="account-page">
       <div className="account-page-container">
@@ -71,9 +87,14 @@ const AccountPage = () => {
               <SortBy />
             </div>
             <div className="add-button">
-              <AddButton label="ADD MEMBER" Icon={FaUserPlus} />
+              {/* Toggle visibility of the CreateUserForm on button click */}
+              <AddButton label="ADD MEMBER" Icon={FaUserPlus} onClick={toggleCreateForm} />
             </div>
           </div>
+
+          {/* Conditionally render CreateUserForm when showCreateForm is true */}
+          {showCreateForm && <CreateUserForm onClose={toggleCreateForm} refreshUsers={refreshUserList} />}
+
           <table className="account-table">
             <thead>
               <tr>

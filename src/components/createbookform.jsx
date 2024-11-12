@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import CloseButton from './closebutton.jsx' // Import CloseButton
+import CloseButton from './closebutton.jsx'; // Import CloseButton
 import '../assets/css/createbookform.css';
 
-const CreateBookForm = ({ onClose }) => {
+const CreateBookForm = ({ onClose, refreshBooks }) => {  // Nhận thêm prop refreshBooks
   const [formData, setFormData] = useState({
     bookName: '',
     image: null,
@@ -47,9 +47,8 @@ const CreateBookForm = ({ onClose }) => {
       if (!response.ok) {
         throw new Error('Failed to create book');
       }
-
-      alert('Book created successfully!');
       onClose(); // Đóng form sau khi thêm thành công
+      refreshBooks();  // Gọi refreshBooks để làm mới danh sách sách
     } catch (error) {
       console.error('Lỗi khi tạo sách:', error);
     }

@@ -9,13 +9,16 @@ import DeleteButton from '../../components/deletebutton.jsx';
 import { FaBook } from 'react-icons/fa';
 import CreateBookForm from '../../components/createbookform.jsx';
 import EditBookForm from '../../components/editbookform.jsx';
+import DeleteBook from '../../services/book/deletebook.jsx';
 
 const BookPage = () => {
     const [bookData, setBookData] = useState([]);
     const [showBookForm, setShowBookForm] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null); // State to hold the selected image for modal
-    const [showEditForm, setShowEditForm] = useState(false);  // New state to control Edit form visibility
+    const [selectedImage, setSelectedImage] = useState(null);
+    const [showEditForm, setShowEditForm] = useState(false);
     const [selectedBookId, setSelectedBookId] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [successMessage, setSuccessMessage] = useState(null);
 
     const toggleBookForm = () => setShowBookForm(!showBookForm);
 
@@ -24,6 +27,7 @@ const BookPage = () => {
             const token = localStorage.getItem('token');
             if (!token) {
                 console.error('Token không tìm thấy!');
+                setErrorMessage('Token không tìm thấy! Vui lòng đăng nhập lại.');
                 return;
             }
 
@@ -35,12 +39,16 @@ const BookPage = () => {
                 }
             });
 
-            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
             const result = await response.json();
             console.log("Dữ liệu đã lấy:", result);
             setBookData(result.data || []);
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu sách:', error);
+            setErrorMessage('Lỗi khi lấy dữ liệu sách. Vui lòng thử lại sau.');
         }
     };
 
@@ -48,17 +56,28 @@ const BookPage = () => {
         fetchBooks();
     }, []);
 
-    // Handle image click to set the selected image for modal
     const handleImageClick = (image) => {
-        setSelectedImage(image); // Update the selected image
+        setSelectedImage(image);
     };
 
     const closeModal = () => {
-        setSelectedImage(null); // Close the modal by setting selectedImage to null
+        setSelectedImage(null);
     };
+
     const handleEditClick = (bookId) => {
-        setSelectedBookId(bookId);  // Set the selected bookId
-        setShowEditForm(true);       // Show the EditBookForm
+        setSelectedBookId(bookId);
+        setShowEditForm(true);
+    };
+
+    const handleDeleteBook = async (bookId) => {
+        try {
+            await DeleteBook({ bookId, onDeleteSuccess: fetchBooks });
+            setSuccessMessage('Sách đã được xóa thành công!');
+            fetchBooks();
+        } catch (error) {
+            console.error('Lỗi khi xóa sách:', error);
+            setErrorMessage('Lỗi khi xóa sách. Vui lòng thử lại.');
+        }
     };
 
     return (
@@ -75,6 +94,10 @@ const BookPage = () => {
                             <AddButton label="ADD BOOK" Icon={FaBook} onClick={toggleBookForm} />
                         </div>
                     </div>
+
+                    {errorMessage && <div className="error-message">{errorMessage}</div>}
+                    {successMessage && <div className="success-message">{successMessage}</div>}
+
                     <table className="book-table">
                         <thead>
                             <tr>
@@ -100,7 +123,7 @@ const BookPage = () => {
                                             <img
                                                 src={`http://localhost:8083/uploads/${book.image}`}
                                                 alt={book.bookName}
-                                                onClick={() => handleImageClick(`http://localhost:8083/uploads/${book.image}`)} // On click, set the selected image
+                                                onClick={() => handleImageClick(`http://localhost:8083/uploads/${book.image}`)} 
                                             />
                                         ) : (
                                             "N/A"
@@ -108,17 +131,17 @@ const BookPage = () => {
                                     </td>
                                     <td>{book.bookId}</td>
                                     <td>{book.bookName}</td>
-                                    <td>{book.category || "N/A"}</td>
+                                    <td>{book.categoryName || "N/A"}</td>
                                     <td>{book.crackId || "N/A"}</td>
                                     <td>{book.publisher || "N/A"}</td>
-                                    <td>{book.author || "N/A"}</td>
+                                    <td>{book.authorName || "N/A"}</td>
                                     <td>{book.currentQuantity || "N/A"}</td>
                                     <td>{book.quantity || "N/A"}</td>
                                     <td>{book.postingDate || "N/A"}</td>
                                     <td>
                                         <div className="action-buttons">
-                                            <EditButton label="EDIT" onClick={() => handleEditClick(book.bookId)} /> {/* Pass bookId on Edit click */}
-                                            <DeleteButton label="DELETE" />
+                                            <EditButton label="EDIT" onClick={() => handleEditClick(book.bookId)} />
+                                            <DeleteButton label="DELETE" onClick={() => handleDeleteBook(book.bookId)} />
                                         </div>
                                     </td>
                                 </tr>
@@ -139,7 +162,7 @@ const BookPage = () => {
             {showBookForm && (
                 <div className="modal">
                     <div className="modal-content">
-                        <CreateBookForm onClose={toggleBookForm} refreshBooks={fetchBooks} /> {/* AddBook form */}
+                        <CreateBookForm onClose={toggleBookForm} refreshBooks={fetchBooks} /> {/* Truyền refreshBooks vào */}
                     </div>
                 </div>
             )}
@@ -147,7 +170,7 @@ const BookPage = () => {
             {showEditForm && selectedBookId && (
                 <div className="modal">
                     <div className="modal-content">
-                        <EditBookForm onClose={() => setShowEditForm(false)} bookId={selectedBookId} />
+                        <EditBookForm onClose={() => setShowEditForm(false)} bookId={selectedBookId} refreshBooks={fetchBooks}/> {/* Truyền refreshBooks vào */}
                     </div>
                 </div>
             )}

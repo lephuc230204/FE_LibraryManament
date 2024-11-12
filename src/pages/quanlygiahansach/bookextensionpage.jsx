@@ -20,10 +20,6 @@ const BookExtensionPage = () => {
               try {
                 const decodedToken = jwtDecode(token);
                 console.log('Decoded Token:', decodedToken);
-                if (decodedToken.role !== 'ROLE_ADMIN') {
-                  alert('Bạn không có quyền truy cập vào trang này!');
-                  return;
-                }
               } catch (error) {
                 console.error('Lỗi khi giải mã token:', error);
                 return;
@@ -34,7 +30,7 @@ const BookExtensionPage = () => {
             }
     
             console.log("Đang lấy dữ liệu...");
-            const response = await fetch('http://localhost:8083/api/v1/admin/book-renewal/getall', {
+            const response = await fetch('http://localhost:8083/api/v1/admin/book-renewal', {
               method: 'GET',
               headers: {
                 'Authorization': `Bearer ${token}`,
