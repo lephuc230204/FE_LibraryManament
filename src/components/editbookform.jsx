@@ -29,16 +29,12 @@ const EditBookForm = ({ onClose, bookId }) => {
         }
 
         const result = await response.json();
+        if (result.data) {
+          setFormData(result.data); // Set dữ liệu từ trường 'data'
+        } else {
+          setFormData([]); // Trường hợp không có dữ liệu
+        }
         console.log("Dữ liệu đã lấy:", result);
-        setFormData({
-          bookName: result.bookName || '',
-          image: null, // Hình ảnh hiện tại cần xử lý riêng biệt
-          quantity: result.quantity || '1',
-          categoryName: result.categoryName || '',
-          authorName: result.authorName || '',
-          publisher: result.publisher || '',
-          crackId: result.crackId || '1',
-        });
       } catch (error) {
         console.error('Lỗi khi tải dữ liệu sách:', error);
       }
@@ -108,9 +104,9 @@ const EditBookForm = ({ onClose, bookId }) => {
         Hình ảnh:
         {formData.image && (
             <img
-            src={`http://localhost:8083/images/${formData.image}`}
+            src={`http://localhost:8083/uploads/${formData.image}`}
             alt="Current Book"
-            style={{ maxWidth: '200px', marginBottom: '10px' }}
+            style={{ maxWidth: '40%' }}
             />
         )}
         <input
@@ -136,7 +132,7 @@ const EditBookForm = ({ onClose, bookId }) => {
           <input
             type="text"
             name="categoryName"
-            value={formData.categoryName}
+            value={formData.category}
             onChange={handleChange}
             required
           />
@@ -146,7 +142,7 @@ const EditBookForm = ({ onClose, bookId }) => {
           <input
             type="text"
             name="authorName"
-            value={formData.authorName}
+            value={formData.author}
             onChange={handleChange}
             required
           />
@@ -172,7 +168,9 @@ const EditBookForm = ({ onClose, bookId }) => {
             required
           />
         </label>
-        <button type="submit">Cập nhật sách</button>
+        <div className="button-container">
+          <button type="submit">Cập nhật sách</button>
+        </div>
       </form>
       <CloseButton onClick={onClose} />
     </div>

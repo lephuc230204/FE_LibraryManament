@@ -20,10 +20,6 @@ const AccountPage = () => {
           try {
             const decodedToken = jwtDecode(token);
             console.log('Decoded Token:', decodedToken);
-            if (decodedToken.role !== 'ROLE_ADMIN') {
-              alert('Bạn không có quyền truy cập vào trang này!');
-              return;
-            }
           } catch (error) {
             console.error('Lỗi khi giải mã token:', error);
             return;
