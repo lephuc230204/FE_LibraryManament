@@ -92,8 +92,8 @@
     
 
     return (
-      <div className="book-form-container">
-        <form className="book-form" onSubmit={handleSubmit}>
+      <div className="edit-book-form-container">
+        <form className="edit-book-form" onSubmit={handleSubmit}>
           <label>
             Tên sách:
             <input

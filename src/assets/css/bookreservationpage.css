@@ -58,3 +58,63 @@
     text-align: center;
     border-bottom: 1px solid #ddd;
 }
+
+/* Styling for book image */
+.book-reservation-table img {
+    width: 100px;  /* Set the image width to 100px */
+    height: 100px;  /* Maintain aspect ratio */
+    object-fit: cover; /* Optional: ensure the image covers the area without distortion */
+}
+
+/* Overlay for the modal */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Show the modal (fade-in effect) */
+.overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Optional: Add some styles for the button to close the modal */
+.overlay .close-btn {
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+.image-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;  /* Mặc định là ẩn */
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.image-modal-overlay.show {
+    display: flex;  /* Khi có class 'show' thì modal sẽ hiển thị */
+}
+
+.image-modal-content img {
+    max-width: 90%;
+    max-height: 90%;
+}

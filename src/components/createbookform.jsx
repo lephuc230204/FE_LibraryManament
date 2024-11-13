@@ -55,8 +55,8 @@ const CreateBookForm = ({ onClose, refreshBooks }) => {  // Nhận thêm prop re
   };
 
   return (
-    <div className="book-form-container">
-      <form className="book-form" onSubmit={handleSubmit}>
+    <div className="createbook-form-container">
+      <form className="create-book-form" onSubmit={handleSubmit}>
         <label>
           Book Name:
           <input type="text" name="bookName" value={formData.bookName} onChange={handleChange} required />
