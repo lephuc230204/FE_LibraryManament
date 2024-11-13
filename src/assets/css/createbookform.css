@@ -1,4 +1,4 @@
-.book-form {
+.create-book-form {
   background-color: #f7dada;
   padding: 15px;
   width: 300px;
@@ -6,16 +6,16 @@
   font-size: 14px;
 }
 
-.book-form label {
+.create-book-form label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
   font-size: 14px;
 }
 
-.book-form input[type="text"],
-.book-form input[type="number"],
-.book-form input[type="file"] {
+.create-book-form input[type="text"],
+.create-book-form input[type="number"],
+.create-book-form input[type="file"] {
   width: 100%;
   padding: 8px;
   border: 1px solid #ddd;
@@ -25,12 +25,12 @@
   font-size: 14px;
 }
 
-.button-container {
+.create-button-container {
   display: flex;
   justify-content: center; /* Centers the button horizontally */
 }
 
-.book-form button {
+.create-book-form button {
   background-color: #008CBA;
   color: white;
   padding: 8px 16px;
@@ -40,11 +40,11 @@
   font-size: 14px;
 }
 
-.book-form button:hover {
+.create-book-form button:hover {
   background-color: #006494;
 }
 
-.book-form button:disabled {
+.create-book-form button:disabled {
   background-color: #ddd;
   cursor: default;
 }
