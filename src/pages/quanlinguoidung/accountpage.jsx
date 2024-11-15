@@ -17,12 +17,15 @@ const AccountPage = () => {
   const [showEditForm, setShowEditForm] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0); // trang hiện tại
+  const [size, setSize] = useState(10); // kích thước trang
+  const [totalPages, setTotalPages] = useState(1); // tổng số trang
 
-  const fetchUsers = async () => {
+  const fetchUsers = async (page, size) => {
     const token = localStorage.getItem('accessToken');
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:8083/api/v1/admin/users', {
+      const response = await fetch(`http://localhost:8083/api/v1/admin/users?page=${page}&size=${size}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -32,7 +35,8 @@ const AccountPage = () => {
 
       if (response.ok) {
         const result = await response.json();
-        setUserData(result.data || []);
+        setUserData(result.data.content || []);
+        setTotalPages(result.data.totalPages || 1); // cập nhật tổng số trang
       } else {
         console.error('Failed to fetch users');
       }
@@ -44,8 +48,8 @@ const AccountPage = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchUsers(page, size);
+  }, [page, size]);
 
   const toggleCreateForm = () => {
     setShowCreateForm(prevState => !prevState);
@@ -57,7 +61,7 @@ const AccountPage = () => {
   };
 
   const refreshUserList = () => {
-    fetchUsers();
+    fetchUsers(page, size);
   };
 
   const handleDelete = async (userId) => {
@@ -67,6 +71,14 @@ const AccountPage = () => {
     } catch (error) {
       console.error('Lỗi khi xóa người dùng:', error);
     }
+  };
+
+  const handleNextPage = () => {
+    if (page < totalPages - 1) setPage(page + 1);
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 0) setPage(page - 1);
   };
 
   if (loading) {
@@ -127,6 +139,12 @@ const AccountPage = () => {
               ))}
             </tbody>
           </table>
+
+          <div className="pagination">
+            <button onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
+            <span>Page {page + 1} of {totalPages}</span>
+            <button onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
+          </div>
         </div>
       </div>
     </div>
