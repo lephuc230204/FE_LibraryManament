@@ -1,7 +1,7 @@
 .edit-button {
   display: flex;
   align-items: center;
-  background-color: rgb(63, 250, 6); /* Light pink background */
+  background-color: rgb(0, 166, 255); /* Light pink background */
   color: #333; /* Dark text color */
   border: none;
   border-radius: 20px;

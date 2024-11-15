@@ -7,9 +7,8 @@ const EditUserForm = ({ onClose, refreshUsers, userId }) => {
     username: '',
     email: '',
     phone: '',
-    dob: '',
-    role: '',
-    statusUser: ''  // Renamed to avoid confusion with HTTP status
+    dob: '', // Ensure dob is handled correctly
+    roleName: '',
   });
 
   const [error, setError] = useState('');
@@ -32,19 +31,19 @@ const EditUserForm = ({ onClose, refreshUsers, userId }) => {
           }
         });
 
-        if (response.ok) {
-          const data = await response.json();
+        const result = await response.json();
+        console.log('User data from API:', result);
+
+        if (result.data) {
+          const { dob, ...rest } = result.data;
+
+          // Convert the date format to yyyy-MM-dd for the input field
+          const formattedDob = dob ? dob.split('-').reverse().join('-') : '';
+
           setUserData({
-            username: data.username || '',
-            email: data.email || '',
-            phone: data.phone || '',
-            dob: data.dob || '',
-            role: data.role || '',
-            statusUser: data.status || ''  // Assign to statusUser to maintain clarity
+            ...rest,
+            dob: formattedDob, // Store the formatted dob here
           });
-        } else {
-          const errorResponse = await response.json();
-          setError(errorResponse.message || 'Failed to fetch user data.');
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -60,25 +59,25 @@ const EditUserForm = ({ onClose, refreshUsers, userId }) => {
     setUserData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  // API update function
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccessMessage('');
   
-    // Format the date of birth to the required format
-    const [year, month, day] = userData.dob.split('-');
-    const formattedDob = `${day}-${month}-${year}`;
+    // Format dob to dd-MM-yyyy before sending it
+    const formattedDob = userData.dob ? userData.dob.split('-').reverse().join('-') : '';
   
-    // Prepare the payload for the API request
+    // Prepare the payload with the formatted `dob`
     const userPayload = {
       username: userData.username,
       email: userData.email,
       phone: userData.phone,
-      dob: formattedDob,
-      role: userData.role,
-      status: userData.statusUser  // Use statusUser from the form
+      dob: formattedDob,  // Format dob to dd-MM-yyyy before sending
+      role: userData.roleName,
+      status: userData.status
     };
+  
+    console.log('User payload to be sent:', userPayload);
   
     try {
       const token = localStorage.getItem('accessToken');
@@ -98,30 +97,25 @@ const EditUserForm = ({ onClose, refreshUsers, userId }) => {
       });
   
       const result = await response.json(); // Parse the response to get the result message
+      console.log('Response from server:', result);
   
       if (!response.ok) {
         throw new Error(result.message || 'Failed to update user');
       }
   
-      // After successful update, show the success message
+      // After successful update, show success message
       setSuccessMessage('User updated successfully!');
       
-      // Optionally, keep the updated status from form in the UI
-      setUserData({
-        ...userData,
-        statusUser: userData.statusUser // Ensure the status selected is reflected in the UI
-      });
-  
       onClose(); // Close the form after success
       if (refreshUsers) {
-        refreshUsers(); // Refresh user list after update (if needed)
+        refreshUsers(); // Refresh the user list if necessary
       }
     } catch (error) {
       console.error('Error updating user:', error);
       setError('Failed to update user. Please try again.');
     }
   };
-
+  
   return (
     <div className="modal-overlay">
       <div className="user-form-container">
@@ -140,16 +134,10 @@ const EditUserForm = ({ onClose, refreshUsers, userId }) => {
             <input type="date" name="dob" value={userData.dob} onChange={handleChange} required />
           </label>
           <label>Role:
-            <select name="role" value={userData.role} onChange={handleChange} required>
+            <select name="roleName" value={userData.roleName} onChange={handleChange} required>
               <option value="">Select Role</option>
               <option value="ROLE_ADMIN">Admin</option>
               <option value="ROLE_USER">User</option>
-            </select>
-          </label>
-          <label>Status:
-            <select name="statusUser" value={userData.statusUser} onChange={handleChange} required>
-              <option value="ACTIVE">Active</option>
-              <option value="DELETED">Deleted</option>
             </select>
           </label>
           <div className="button-container">

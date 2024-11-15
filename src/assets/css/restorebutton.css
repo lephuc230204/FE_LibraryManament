@@ -1,0 +1,16 @@
+.restore-button {
+    display: flex;
+    align-items: center;
+    background-color: rgb(63, 250, 6); /* Light pink background */
+    color: #333; /* Dark text color */
+    border: none;
+    border-radius: 20px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    justify-content: center; /* Căn chữ giữa theo chiều ngang */
+    width: 100px;
+    height: 40px;
+  }
+  

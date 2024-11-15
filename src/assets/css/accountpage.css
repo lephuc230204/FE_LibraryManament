@@ -105,39 +105,39 @@
   position: relative;  /* Necessary to position the dropdown */
 }
 
-/* Edit button style */
-.edit-button {
-  cursor: pointer;
-  padding: 8px 12px;
-  background-color: #4CAF50; /* Edit button color */
-  color: white;
-  border-radius: 50px; /* Make the button fully rounded */
-  border: none;
-  transition: background-color 0.3s;
-  display: inline-flex;
+.pagination {
+  display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 20px;
+  gap: 10px; /* Khoảng cách giữa các nút */
 }
 
-.edit-button:hover {
-  background-color: #45a049;  /* Hover effect */
-}
-
-/* Delete button style (for consistency) */
-.delete-button {
+.pagination button {
+  padding: 10px 15px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f8f9fa;
+  color: #333;
   cursor: pointer;
-  padding: 8px 12px;
-  background-color: #f44336; /* Delete button color */
-  color: white;
-  border-radius: 50px; /* Make the button fully rounded */
-  border: none;
-  transition: background-color 0.3s;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.delete-button:hover {
-  background-color: #e53935;  /* Hover effect */
+.pagination button:hover {
+  background-color: #007bff;
+  color: #fff;
 }
 
+.pagination button:disabled {
+  background-color: #e9ecef;
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
+.pagination .active {
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  border-color: #0056b3;
+}

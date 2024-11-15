@@ -30,11 +30,11 @@ const EditReservationBook = ({ onClose, id, refreshReservations }) => {
 
         const result = await response.json();
         console.log(result);
-          if (result.data) {
-            setReservation({
-              ...result.data,
-            });
-          }
+        if (result.data) {
+          setReservation({
+            ...result.data,
+          });
+        }
       } catch (error) {
         console.error('Lỗi khi tải dữ liệu đặt sách:', error);
       }

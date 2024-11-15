@@ -7,9 +7,13 @@ import AddButton from '../../components/addbutton.jsx';
 import { FaUserPlus } from 'react-icons/fa';
 import DeleteButton from '../../components/deletebutton.jsx';
 import EditButton from '../../components/editbutton.jsx';
+import RestoreButton from '../../components/restorebutton.jsx';
 import CreateUserForm from '../../components/createuserform.jsx';
 import EditUserForm from '../../components/edituserform.jsx';
 import { deleteUser } from '../../services/UserService';
+import { restoreUser } from '../../services/user/restoreUser.jsx';
+
+
 
 const AccountPage = () => {
   const [userData, setUserData] = useState([]);
@@ -18,7 +22,7 @@ const AccountPage = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0); // trang hiện tại
-  const [size, setSize] = useState(10); // kích thước trang
+  const [size, setSize] = useState(13); // kích thước trang
   const [totalPages, setTotalPages] = useState(1); // tổng số trang
 
   const fetchUsers = async (page, size) => {
@@ -72,6 +76,14 @@ const AccountPage = () => {
       console.error('Lỗi khi xóa người dùng:', error);
     }
   };
+  const handleRestore = async (userId) => {
+    try {
+      await restoreUser(userId);
+      refreshUserList();
+    } catch (error) {
+      console.error('Lỗi khi khôi phục người dùng:', error);
+    }
+  };
 
   const handleNextPage = () => {
     if (page < totalPages - 1) setPage(page + 1);
@@ -84,7 +96,14 @@ const AccountPage = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-
+  const generatePageNumbers = () => {
+    const pages = [];
+    for (let i = 0; i < totalPages; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+  
   return (
     <div className="account-page">
       <div className="account-page-container">
@@ -111,9 +130,11 @@ const AccountPage = () => {
                 <th>Email</th>
                 <th>Số điện thoại</th>
                 <th>Vai trò</th>
-                <th>Ngày tạo</th>
                 <th>Ngày sinh</th>
                 <th>Trạng thái</th>
+                <th>Thẻ thư viện</th>
+                <th>Ngày tạo</th>
+                <th></th>
                 <th></th>
                 <th></th>
               </tr>
@@ -126,12 +147,14 @@ const AccountPage = () => {
                   <td>{user.email || "N/A"}</td>
                   <td>{user.phone || "N/A"}</td>
                   <td>{user.roleName || "N/A"}</td>
-                  <td>{user.createdDate || "N/A"}</td>
                   <td>{user.dob || "N/A"}</td>
                   <td>{user.status || "N/A"}</td>
+                  <td>{user.cardLibrary || "N/A"}</td>
+                  <td>{user.createdDate || "N/A"}</td>
                   <td>
                     <div className="action-buttons">
                       <EditButton label="EDIT" onClick={() => toggleEditForm(user.id)} />
+                      <RestoreButton label="RESTORE" onClick={() => handleRestore(user.id)}/>
                       <DeleteButton label="DELETE" onClick={() => handleDelete(user.id)} />
                     </div>
                   </td>
@@ -141,9 +164,19 @@ const AccountPage = () => {
           </table>
 
           <div className="pagination">
-            <button onClick={handlePreviousPage} disabled={page === 0}>Previous</button>
-            <span>Page {page + 1} of {totalPages}</span>
-            <button onClick={handleNextPage} disabled={page === totalPages - 1}>Next</button>
+            <button onClick={() => setPage(0)} disabled={page === 0}>{"<<"}</button>
+            <button onClick={handlePreviousPage} disabled={page === 0}>{"<"}</button>
+            {generatePageNumbers().map((pageNumber) => (
+              <button
+                key={pageNumber}
+                onClick={() => setPage(pageNumber)}
+                className={page === pageNumber ? 'active' : ''}
+              >
+                {pageNumber + 1}
+              </button>
+            ))}
+            <button onClick={handleNextPage} disabled={page === totalPages - 1}>{">"}</button>
+            <button onClick={() => setPage(totalPages - 1)} disabled={page === totalPages - 1}>{">>"}</button>
           </div>
         </div>
       </div>
