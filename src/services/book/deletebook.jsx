@@ -1,5 +1,10 @@
 const DeleteBook = ({ bookId, onDeleteSuccess }) => {
     const handleDelete = async () => {
+        const token = localStorage.getItem('accessToken'); // Get the access token
+
+        if (!token) {
+            throw new Error('Token is missing');
+        }
         const confirmDelete = window.confirm("Bạn có chắc chắn muốn xóa sách này?");
         if (!confirmDelete) return;
 
@@ -8,7 +13,7 @@ const DeleteBook = ({ bookId, onDeleteSuccess }) => {
             const response = await fetch(`http://localhost:8083/api/v1/admin/books/delete/${bookId}`, {
                 method: 'DELETE',
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
+                    'Authorization': `Bearer ${token}`,
                 },
             });
 

@@ -28,14 +28,13 @@ const BookPage = () => {
 
     const fetchBooks = async () => {
         try {
-            setLoading(true); // Set loading to true when fetching starts
+            setLoading(true); 
             const token = localStorage.getItem('token');
             if (!token) {
-                console.error('Token không tìm thấy!');
                 setErrorMessage('Token không tìm thấy! Vui lòng đăng nhập lại.');
                 return;
             }
-
+    
             const response = await fetch(`http://localhost:8083/api/v1/admin/books?page=${page}&size=${size}`, {
                 method: 'GET',
                 headers: {
@@ -43,23 +42,18 @@ const BookPage = () => {
                     'Content-Type': 'application/json'
                 }
             });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
+    
+            if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+    
             const result = await response.json();
-            console.log("Dữ liệu đã lấy:", result);
             setBookData(result.data.content || []);
             setTotalPages(result.data.totalPages || 1);
         } catch (error) {
-            console.error('Lỗi khi lấy dữ liệu sách:', error);
             setErrorMessage('Lỗi khi lấy dữ liệu sách. Vui lòng thử lại sau.');
         } finally {
-            setLoading(false); // Set loading to false when the fetching is complete
+            setLoading(false);
         }
     };
-
     useEffect(() => {
         fetchBooks(page, size);
     }, [page, size]);
@@ -67,11 +61,7 @@ const BookPage = () => {
     const handleImageClick = (image) => {
         setSelectedImage(image);
     };  
-
-    const refreshBookList = () => {
-        fetchBooks(page, size);
-    };
-
+    
     const closeModal = () => {
         setSelectedImage(null);
     };
@@ -80,18 +70,16 @@ const BookPage = () => {
         setSelectedBookId(bookId);
         setShowEditForm(true);
     };
-
     const handleDeleteBook = async (bookId) => {
         try {
             await DeleteBook({ bookId, onDeleteSuccess: fetchBooks });
-            setSuccessMessage('Sách đã được xóa thành công!');
             fetchBooks();
         } catch (error) {
             console.error('Lỗi khi xóa sách:', error);
             setErrorMessage('Lỗi khi xóa sách. Vui lòng thử lại.');
         }
     };
-
+    
     const handleNextPage = () => {
         if (page < totalPages - 1) setPage(page + 1);
     };
