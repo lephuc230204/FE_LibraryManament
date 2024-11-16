@@ -39,6 +39,7 @@ const AccountPage = () => {
 
       if (response.ok) {
         const result = await response.json();
+        console.log("Lay du lieu",result);
         setUserData(result.data.content || []);
         setTotalPages(result.data.totalPages || 1); // cập nhật tổng số trang
       } else {

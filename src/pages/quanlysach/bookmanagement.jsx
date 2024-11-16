@@ -19,11 +19,16 @@ const BookPage = () => {
     const [selectedBookId, setSelectedBookId] = useState(null);
     const [errorMessage, setErrorMessage] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
+    const [page, setPage] = useState(0); // Current page
+    const [size, setSize] = useState(10); // Page size
+    const [totalPages, setTotalPages] = useState(1); // Total pages
+    const [loading, setLoading] = useState(true);
 
     const toggleBookForm = () => setShowBookForm(!showBookForm);
 
     const fetchBooks = async () => {
         try {
+            setLoading(true); // Set loading to true when fetching starts
             const token = localStorage.getItem('token');
             if (!token) {
                 console.error('Token không tìm thấy!');
@@ -31,7 +36,7 @@ const BookPage = () => {
                 return;
             }
 
-            const response = await fetch('http://localhost:8083/api/v1/admin/books', {
+            const response = await fetch(`http://localhost:8083/api/v1/admin/books?page=${page}&size=${size}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -45,19 +50,26 @@ const BookPage = () => {
 
             const result = await response.json();
             console.log("Dữ liệu đã lấy:", result);
-            setBookData(result.data || []);
+            setBookData(result.data.content || []);
+            setTotalPages(result.data.totalPages || 1);
         } catch (error) {
             console.error('Lỗi khi lấy dữ liệu sách:', error);
             setErrorMessage('Lỗi khi lấy dữ liệu sách. Vui lòng thử lại sau.');
+        } finally {
+            setLoading(false); // Set loading to false when the fetching is complete
         }
     };
 
     useEffect(() => {
-        fetchBooks();
-    }, []);
+        fetchBooks(page, size);
+    }, [page, size]);
 
     const handleImageClick = (image) => {
         setSelectedImage(image);
+    };  
+
+    const refreshBookList = () => {
+        fetchBooks(page, size);
     };
 
     const closeModal = () => {
@@ -79,6 +91,26 @@ const BookPage = () => {
             setErrorMessage('Lỗi khi xóa sách. Vui lòng thử lại.');
         }
     };
+
+    const handleNextPage = () => {
+        if (page < totalPages - 1) setPage(page + 1);
+    };
+    
+    const handlePreviousPage = () => {
+        if (page > 0) setPage(page - 1);
+    };
+    
+    const generatePageNumbers = () => {
+        const pages = [];
+        for (let i = 0; i < totalPages; i++) {
+            pages.push(i);
+        }
+        return pages;
+    };
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="book-page">
@@ -148,6 +180,21 @@ const BookPage = () => {
                             ))}
                         </tbody>
                     </table>
+                    <div className="pagination">
+                        <button onClick={() => setPage(0)} disabled={page === 0}>{"<<"}</button>
+                        <button onClick={handlePreviousPage} disabled={page === 0}>{"<"}</button>
+                        {generatePageNumbers().map((pageNumber) => (
+                        <button
+                            key={pageNumber}
+                            onClick={() => setPage(pageNumber)}
+                            className={page === pageNumber ? 'active' : ''}
+                        >
+                            {pageNumber + 1}
+                        </button>
+                        ))}
+                        <button onClick={handleNextPage} disabled={page === totalPages - 1}>{">"}</button>
+                        <button onClick={() => setPage(totalPages - 1)} disabled={page === totalPages - 1}>{">>"}</button>
+                    </div>
                 </div>
             </div>
 
@@ -162,7 +209,7 @@ const BookPage = () => {
             {showBookForm && (
                 <div className="modal">
                     <div className="modal-content">
-                        <CreateBookForm onClose={toggleBookForm} refreshBooks={fetchBooks} /> {/* Truyền refreshBooks vào */}
+                        <CreateBookForm onClose={toggleBookForm} refreshBooks={fetchBooks} />
                     </div>
                 </div>
             )}
@@ -170,7 +217,7 @@ const BookPage = () => {
             {showEditForm && selectedBookId && (
                 <div className="modal">
                     <div className="modal-content">
-                        <EditBookForm onClose={() => setShowEditForm(false)} bookId={selectedBookId} refreshBooks={fetchBooks}/> {/* Truyền refreshBooks vào */}
+                        <EditBookForm onClose={() => setShowEditForm(false)} bookId={selectedBookId} refreshBooks={fetchBooks} />
                     </div>
                 </div>
             )}

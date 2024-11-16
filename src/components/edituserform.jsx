@@ -74,7 +74,6 @@ const EditUserForm = ({ onClose, refreshUsers, userId }) => {
       phone: userData.phone,
       dob: formattedDob,  // Format dob to dd-MM-yyyy before sending
       role: userData.roleName,
-      status: userData.status
     };
   
     console.log('User payload to be sent:', userPayload);
