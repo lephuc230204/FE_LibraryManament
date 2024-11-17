@@ -6,11 +6,15 @@ const AddBorrowingForm = ({ onClose, refreshBorrowingList }) => {
     const [userId, setUserId] = useState('');
     const [dueDate, setDueDate] = useState('');
     const [errorMessage, setErrorMessage] = useState(''); // Thêm state để lưu thông báo lỗi
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false); // State để điều khiển hiển thị hộp thoại xác nhận
 
     // Hàm xử lý khi form được submit
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setShowConfirmDialog(true); // Hiển thị hộp thoại xác nhận
+    };
 
+    const handleConfirm = async () => {
         try {
             const token = localStorage.getItem('accessToken'); // Lấy token từ localStorage
 
@@ -51,6 +55,10 @@ const AddBorrowingForm = ({ onClose, refreshBorrowingList }) => {
         }
     };
 
+    const handleCancel = () => {
+        setShowConfirmDialog(false); // Đóng hộp thoại xác nhận nếu người dùng hủy
+    };
+
     return (
         <div className="add-borrowing-form">
             <h2>Thêm Mượn Sách</h2>
@@ -88,6 +96,17 @@ const AddBorrowingForm = ({ onClose, refreshBorrowingList }) => {
                     <button type="button" onClick={onClose}>Hủy</button>
                 </div>
             </form>
+
+            {/* Hiển thị hộp thoại xác nhận nếu showConfirmDialog là true */}
+            {showConfirmDialog && (
+                <div className="confirm-dialog">
+                    <p>Bạn có chắc chắn muốn thêm mượn sách này?</p>
+                    <div className="confirm-dialog-actions">
+                        <button onClick={handleConfirm}>Xác nhận</button>
+                        <button onClick={handleCancel}>Hủy</button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
