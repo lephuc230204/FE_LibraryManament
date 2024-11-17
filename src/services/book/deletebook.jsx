@@ -24,7 +24,7 @@ const DeleteBook = ({ bookId, onDeleteSuccess }) => {
             onDeleteSuccess();  // Gọi hàm onDeleteSuccess để cập nhật danh sách sau khi xóa
         } catch (error) {
             console.error("Lỗi khi xóa sách:", error);
-            alert("Lỗi khi xóa sách, vui lòng thử lại.");
+            alert("Sách đang được đặt hoặc mượn không thể xóa");
         }
     };
 

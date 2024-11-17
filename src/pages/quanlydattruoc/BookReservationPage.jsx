@@ -17,12 +17,14 @@ const BookReservationPage = () => {
     const [showEditForm, setShowEditForm] = useState(false);  // State to control Edit form visibility
     const [selectedReservationId, setSelectedReservationId] = useState(null);  // Store selected reservation id
     const [selectedImage, setSelectedImage] = useState(null);  // Store the selected image URL for viewing in modal
+    const [currentPage, setCurrentPage] = useState(0); // Store current page
+    const [totalPages, setTotalPages] = useState(0); // Store total pages
 
-    // Fetch reservation data
-    const fetchReservationData = async () => {
+    // Fetch reservation data with pagination
+    const fetchReservationData = async (page = 0) => {
         try {
             const token = localStorage.getItem('accessToken');
-            const response = await fetch('http://localhost:8083/api/v1/admin/book-reservations', {
+            const response = await fetch(`http://localhost:8083/api/v1/admin/book-reservations?page=${page}&size=10`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -36,16 +38,16 @@ const BookReservationPage = () => {
             }
 
             const result = await response.json();
-            console.log("Dữ liệu đã lấy:", result);
-            setReservationData(result.data || []); // Update state with fetched data
+            setReservationData(result.data.content || []); // Update state with fetched data
+            setTotalPages(result.data.totalPages || 0); // Set total pages for pagination
         } catch (error) {
             console.error('Error fetching reservation data:', error);
         }
     };
 
     useEffect(() => {
-        fetchReservationData();  // Fetch data when component mounts
-    }, []);
+        fetchReservationData(currentPage); // Fetch data when component mounts or page changes
+    }, [currentPage]);
 
     // Show the "Add Request" form
     const handleAddRequestClick = () => {
@@ -75,12 +77,17 @@ const BookReservationPage = () => {
 
     // Function to refresh the reservation list after deletion
     const onDeleteSuccess = () => {
-        fetchReservationData();  // Fetch the updated reservation data
+        fetchReservationData(currentPage);  // Fetch the updated reservation data
     };
 
     // Show image in modal when clicked
     const handleImageClick = (imageUrl) => {
         setSelectedImage(imageUrl);  // Set the selected image URL
+    };
+
+    // Handle pagination page change
+    const handlePageClick = (pageNumber) => {
+        setCurrentPage(pageNumber); // Set the current page number
     };
 
     return (
@@ -142,23 +149,62 @@ const BookReservationPage = () => {
                             ))}
                         </tbody>
                     </table>
+
+                    <div className="pagination">
+                    <button 
+                        onClick={() => handlePageClick(0)} 
+                        disabled={currentPage === 0}
+                    >
+                        &lt;&lt; 
+                    </button>
+
+                    <button 
+                        onClick={() => handlePageClick(currentPage - 1)} 
+                        disabled={currentPage === 0}
+                    >
+                        &lt; 
+                    </button>
+
+                    {Array.from({ length: totalPages }).map((_, index) => (
+                        <button
+                            key={index}
+                            className={index === currentPage ? 'active' : ''}
+                            onClick={() => handlePageClick(index)}
+                        >
+                            {index + 1}
+                        </button>
+                    ))}
+
+                    <button 
+                        onClick={() => handlePageClick(currentPage + 1)} 
+                        disabled={currentPage === totalPages - 1}
+                    >
+                         &gt;
+                    </button>
+
+                    <button 
+                        onClick={() => handlePageClick(totalPages - 1)} 
+                        disabled={currentPage === totalPages - 1}
+                    >
+                        &gt;&gt;
+                    </button>
+                </div>
                 </div>
             </div>
 
             {/* Show EditReservationBook when showEditForm is true */}
             {showEditForm && (
-                <div className={`overlay ${showEditForm ? 'show' : ''}`}>  {/* Apply the 'show' class to display modal */}
+                <div className={`overlay ${showEditForm ? 'show' : ''}`}>
                     <div>
                         <EditReservationBook
                             id={selectedReservationId}
                             onClose={handleCloseForm}
-                            refreshReservations={fetchReservationData}  // Pass refreshReservations to refresh the list
+                            refreshReservations={fetchReservationData}  
                         />
                     </div>
                 </div>
             )}
 
-            {/* Show CreateReservationBook when showCreateForm is true */}
             {showCreateForm && (
                 <div className={`overlay ${showCreateForm ? 'show' : ''}`}>
                     <div>
@@ -171,14 +217,13 @@ const BookReservationPage = () => {
             {selectedImage && (
                 <div 
                     className={`image-modal-overlay ${selectedImage ? 'show' : ''}`} 
-                    onClick={() => setSelectedImage(null)} // Close when clicking outside
+                    onClick={() => setSelectedImage(null)} 
                 >
-                    <div className="image-modal-content" onClick={(e) => e.stopPropagation()}> {/* Prevent closing when clicking inside the modal */}
+                    <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
                         <img src={selectedImage} alt="Large view" />
                     </div>
                 </div>
             )}
-
         </div>
     );
 };

@@ -76,7 +76,7 @@ const BookPage = () => {
             fetchBooks();
         } catch (error) {
             console.error('Lỗi khi xóa sách:', error);
-            setErrorMessage('Lỗi khi xóa sách. Vui lòng thử lại.');
+            setErrorMessage('Sách đang được mượn hoặc đặt không thể xóa.');
         }
     };
     
@@ -155,8 +155,8 @@ const BookPage = () => {
                                     <td>{book.crackId || "N/A"}</td>
                                     <td>{book.publisher || "N/A"}</td>
                                     <td>{book.authorName || "N/A"}</td>
-                                    <td>{book.currentQuantity || "N/A"}</td>
-                                    <td>{book.quantity || "N/A"}</td>
+                                    <td>{book.currentQuantity || 0}</td>
+                                    <td>{book.quantity || 0}</td>
                                     <td>{book.postingDate || "N/A"}</td>
                                     <td>
                                         <div className="action-buttons">
