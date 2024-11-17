@@ -9,11 +9,13 @@ import DeleteButton from '../../components/deletebutton.jsx';
 import { FaBook } from 'react-icons/fa';
 import { jwtDecode } from 'jwt-decode'; // Correct import for jwtDecode
 import AddBorrowingForm from '../../components/addborrowingform'; // Import the AddBorrowingForm component
+import ReturnBook from '../../components/returnbook.jsx';
 
 const BookBorrowingPage = () => {
-    const [borrowingData, setBorrowingData] = useState([]);
+    const [borrowingData, setBorrowingData] = useState([]); // State to store borrowing data
     const [showAddForm, setShowAddForm] = useState(false); // State to toggle the form visibility
 
+    // Fetch borrowing data when the component is mounted
     useEffect(() => {
         const fetchBorrowingData = async () => {
             try {
@@ -52,7 +54,7 @@ const BookBorrowingPage = () => {
                 const result = await response.json();
                 console.log("Dữ liệu đã lấy:", result);
 
-                // Kiểm tra nếu có dữ liệu trong 'data.content'
+                // Cập nhật dữ liệu vào state
                 if (result.data && result.data.content) {
                     setBorrowingData(result.data.content); // Set dữ liệu từ trường 'content'
                 } else {
@@ -64,15 +66,50 @@ const BookBorrowingPage = () => {
         };
 
         fetchBorrowingData();
-    }, []);  
+    }, []); // Chỉ chạy một lần khi component được mount
 
     const handleAddRequestClick = () => {
-        setShowAddForm(true); // Show the form when the button is clicked
+        setShowAddForm(true); // Hiển thị form khi nhấn nút "Add Request"
     };
 
     const handleCloseAddForm = () => {
-        setShowAddForm(false); // Close the form when canceled
+        setShowAddForm(false); // Đóng form khi hủy
     };
+
+    const handleDelete = async (id) => {
+      // Hiển thị hộp thoại xác nhận
+      const isConfirmed = window.confirm('Bạn có chắc chắn muốn xóa không?');
+      if (!isConfirmed) {
+          return; // Nếu người dùng chọn "Cancel", dừng lại không thực hiện hành động xóa
+      }
+  
+      const token = localStorage.getItem('accessToken'); // Lấy accessToken
+      if (!token) {
+          console.error('Không tìm thấy token trong localStorage!');
+          return;
+      }
+  
+      try {
+          const response = await fetch(`http://localhost:8083/api/v1/admin/book-lending/delete/${id}`, {
+              method: 'DELETE',
+              headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+              }
+          });
+  
+          if (!response.ok) {
+              console.error(`Lỗi khi xóa: ${response.status} - ${response.statusText}`);
+              throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+  
+          console.log("Xóa thành công!");
+          // Cập nhật lại danh sách mượn sách sau khi xóa
+          refreshBorrowingList();
+      } catch (error) {
+          console.error('Lỗi khi gọi API DELETE:', error);
+      }
+  };
 
     const refreshBorrowingList = () => {
         // Refresh the borrowing list after adding a new borrowing request
@@ -104,13 +141,14 @@ const BookBorrowingPage = () => {
                         <div className="top-row">
                             <SearchBar />
                             <SortBy />
+                            <ReturnBook refreshBorrowingList={refreshBorrowingList} /> {/* Thêm ReturnBook */}
                         </div>
                         <div className="add-button">
                             <AddButton label="ADD REQUEST" Icon={FaBook} onClick={handleAddRequestClick} />
                         </div>
                     </div>
 
-                    {/* Show AddBorrowingForm when showAddForm is true */}
+                    {/* Hiển thị form AddBorrowingForm khi showAddForm là true */}
                     {showAddForm && (
                         <div className="modal-overlay">
                             <AddBorrowingForm
@@ -123,10 +161,10 @@ const BookBorrowingPage = () => {
                     <table className="borrowing-table">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <th>Borrowing ID</th>
                                 <th>Book ID</th>
-                                <th>User</th>
-                                <th>Staff</th>
+                                <th>User ID</th>
+                                <th>Staff ID</th>
                                 <th>Due Date</th>
                                 <th>Return Date</th>
                                 <th>Creation Date</th>
@@ -147,7 +185,7 @@ const BookBorrowingPage = () => {
                                     <td>
                                         <div className="action-buttons">
                                             <EditButton label="EDIT" />
-                                            <DeleteButton label="DELETE" />
+                                            <DeleteButton label="DELETE" onClick={() => handleDelete(bookBorrow.lendingId)} />
                                         </div>
                                     </td>
                                 </tr>
