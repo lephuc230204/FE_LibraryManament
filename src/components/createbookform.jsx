@@ -43,9 +43,15 @@ const CreateBookForm = ({ onClose, refreshBooks }) => {  // Nhận thêm prop re
         },
         body: bookFormData
       });
-
       if (!response.ok) {
         throw new Error('Failed to create book');
+      }
+      const result = await response.json();
+      if (result.status === 404){
+        alert('CrackId không tồn tại');
+      }
+      else if (result.status === 409){
+        alert('CrackId bị trùng');
       }
       onClose(); // Đóng form sau khi thêm thành công
       refreshBooks();  // Gọi refreshBooks để làm mới danh sách sách

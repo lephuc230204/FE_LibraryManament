@@ -53,7 +53,8 @@ const ReturnBook = ({ refreshBorrowingList }) => {
 
             if (result.status === 200) {
                 setBookLendingDetails(result.data); // Lưu thông tin sách trả về vào state
-                alert('Trả sách thành công!');
+            }else {
+                alert('Người dùng đã trả sách hoặc chưa mượn sách');
             }
 
             // Không đóng form ngay lập tức, giữ lại modal thông tin sách đã trả
@@ -158,7 +159,6 @@ const ReturnBook = ({ refreshBorrowingList }) => {
                             <div><strong>Book ID:</strong> {bookLendingDetails.bookId}</div>
                             <div><strong>Tên sách:</strong> {bookLendingDetails.bookName}</div>
                             <div><strong>Tác giả:</strong> {bookLendingDetails.author}</div>
-                            <div><strong>Ngày tạo:</strong> {new Date(bookLendingDetails.creationDate).toLocaleDateString()}</div>
                             <div><strong>Ngày hết hạn:</strong> {new Date(bookLendingDetails.dueDate).toLocaleDateString()}</div>
                             <div><strong>Ngày trả:</strong> {bookLendingDetails.returnDate ? new Date(bookLendingDetails.returnDate).toLocaleDateString() : "Chưa trả"}</div>
                             <div><strong>User ID:</strong> {bookLendingDetails.userid}</div>
