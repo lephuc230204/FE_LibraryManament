@@ -8,7 +8,6 @@ const ReturnBook = ({ refreshBorrowingList }) => {
         email: ''
     });
     const [bookLendingDetails, setBookLendingDetails] = useState(null); // State để lưu thông tin sách mượn
-    const [message, setMessage] = useState(""); // Thêm state để lưu thông báo
 
     const handleReturnBookClick = () => {
         setShowReturnForm(true); // Hiển thị form
@@ -18,7 +17,6 @@ const ReturnBook = ({ refreshBorrowingList }) => {
         setShowReturnForm(false); // Đóng form
         setFormData({ bookId: '', email: '' }); // Reset form
         setBookLendingDetails(null); // Reset thông tin sách
-        setMessage(""); // Reset thông báo
     };
 
     const handleInputChange = (e) => {
@@ -31,7 +29,7 @@ const ReturnBook = ({ refreshBorrowingList }) => {
 
         const token = localStorage.getItem('accessToken');
         if (!token) {
-            setMessage('Không tìm thấy token!');
+            alert('Không tìm thấy token!');
             return;
         }
 
@@ -46,36 +44,31 @@ const ReturnBook = ({ refreshBorrowingList }) => {
             });
 
             if (!response.ok) {
-                if (response.status === 404) {
-                    const result = await response.json();
-                    setMessage('Không tìm thấy sách hoặc sách đã được trả!');
-                    return;
-                }
-
                 console.error(`Lỗi khi trả sách: ${response.status} - ${response.statusText}`);
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
 
             const result = await response.json();
-            console.log("Kết quả trả về từ API:", result);
+            console.log("Kết quả trả về từ API:", result); // Kiểm tra dữ liệu trả về từ API
 
             if (result.status === 200) {
-                setBookLendingDetails(result.data);
-                setMessage('Trả sách thành công!');
-                handleCloseReturnForm();
+                setBookLendingDetails(result.data); // Lưu thông tin sách trả về vào state
+                alert('Trả sách thành công!');
             }
 
-            refreshBorrowingList();
+            // Không đóng form ngay lập tức, giữ lại modal thông tin sách đã trả
+            refreshBorrowingList(); // Làm mới danh sách mượn sách
         } catch (error) {
             console.error('Lỗi khi gọi API:', error);
-            setMessage('Đã xảy ra lỗi khi trả sách!');
+            alert('Đã xảy ra lỗi khi trả sách!');
         }
     };
 
+    // Hàm xác nhận trả sách
     const handleConfirmReturn = async () => {
         const token = localStorage.getItem('accessToken');
         if (!token) {
-            setMessage('Không tìm thấy token!');
+            alert('Không tìm thấy token!');
             return;
         }
 
@@ -95,22 +88,23 @@ const ReturnBook = ({ refreshBorrowingList }) => {
                 }
 
                 const result = await response.json();
-                console.log("Kết quả trả về từ API:", result);
+                console.log("Kết quả trả về từ API:", result); // Kiểm tra dữ liệu trả về từ API
 
                 if (result.status === 200) {
-                    setMessage('Trả sách thành công!');
-                    setBookLendingDetails(null);
-                    refreshBorrowingList();
+                    alert('Trả sách thành công!');
+                    setBookLendingDetails(null); // Reset thông tin sách sau khi trả thành công
+                    refreshBorrowingList(); // Làm mới danh sách mượn sách
                 }
             } catch (error) {
                 console.error('Lỗi khi gọi API:', error);
-                setMessage('Đã xảy ra lỗi khi trả sách!');
+                alert('Đã xảy ra lỗi khi trả sách!');
             }
         }
     };
 
     return (
         <div className="return-book-container">
+            {/* Nút Return Book */}
             <button className="return-button" onClick={handleReturnBookClick}>
                 Return Book
             </button>
@@ -151,13 +145,6 @@ const ReturnBook = ({ refreshBorrowingList }) => {
                             </div>
                         </form>
                     </div>
-                </div>
-            )}
-
-            {/* Hiển thị thông báo trên giao diện */}
-            {message && (
-                <div className="message-notification">
-                    {message}
                 </div>
             )}
 
