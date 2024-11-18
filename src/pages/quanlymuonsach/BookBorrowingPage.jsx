@@ -10,6 +10,7 @@ import { FaBook } from 'react-icons/fa';
 import { jwtDecode } from 'jwt-decode'; // Correct import for jwtDecode
 import AddBorrowingForm from '../../components/addborrowingform'; // Import the AddBorrowingForm component
 import ReturnBook from '../../components/returnbook.jsx';
+import PostNotificationButton from '../../components/PostNotificationButton.jsx';
 
 const BookBorrowingPage = () => {
     const [borrowingData, setBorrowingData] = useState([]); // State to store borrowing data
@@ -140,6 +141,7 @@ const BookBorrowingPage = () => {
                     <div className="top-bar">
                         <div className="top-row">
                             <SearchBar />
+                            <PostNotificationButton />
                             <SortBy />
                             <ReturnBook refreshBorrowingList={refreshBorrowingList} /> {/* Thêm ReturnBook */}
                         </div>

@@ -12,7 +12,7 @@ import CreateUserForm from '../../components/createuserform.jsx';
 import EditUserForm from '../../components/edituserform.jsx';
 import { deleteUser } from '../../services/UserService';
 import { restoreUser } from '../../services/user/restoreUser.jsx';
-
+import PostNotificationButton from '../../components/PostNotificationCardLibrary';
 
 
 const AccountPage = () => {
@@ -113,6 +113,7 @@ const AccountPage = () => {
           <div className="top-bar">
             <div className="top-row">
               <SearchBar />
+              <PostNotificationButton />
               <SortBy />
             </div>
             <div className="add-button">

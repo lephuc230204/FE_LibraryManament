@@ -141,3 +141,42 @@
   font-weight: bold;
   border-color: #0056b3;
 }
+
+/* CSS for PostNotificationButton */
+.post-notification-button {
+  display: inline-block;
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text */
+  font-size: 16px; /* Font size */
+  padding: 10px 20px; /* Padding around the text */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth transition effect */
+}
+.post-notification-button {
+  left: 57;
+  transform: translateX(-50%); /* Đưa nút về chính giữa */
+}
+
+.post-notification-button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+.post-notification-button:focus {
+  outline: none; /* Remove outline on focus */
+}
+
+.post-notification-button .icon {
+  margin-right: 8px; /* Space between the icon and the text */
+  font-size: 18px; /* Icon size */
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .post-notification-button {
+    width: 100%; /* Button takes full width on smaller screens */
+    font-size: 14px; /* Adjust font size for small screens */
+    padding: 12px 18px; /* Adjust padding */
+  }
+}
