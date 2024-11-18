@@ -23,12 +23,15 @@ const PostNotificationCardLibrary = () => {
         }),
       });
 
-      if (response.ok) {
+      // Đọc response.json() và kiểm tra status
+      const result = await response.json(); 
+
+      if (response.status === 200) {
         console.log('Notification sent successfully!');
-        alert('Gửi thông báo thành công!');
+        alert(result.message || 'Thông báo đã được gửi thành công!'); // Hiển thị message từ response (nếu có)
       } else {
         console.error('Failed to send notification');
-        alert('Gửi thông báo thất bại!');
+        alert(result.message || 'Gửi thông báo thất bại!'); // Nếu API có message, hiển thị message đó
       }
     } catch (error) {
       console.error('Error sending notification:', error);
