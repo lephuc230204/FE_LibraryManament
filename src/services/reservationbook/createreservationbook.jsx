@@ -23,7 +23,18 @@ const CreateReservationBook = ({ onClose, onUpdateReservationList }) => {
                 },
                 body: JSON.stringify(reservationData),
             });
-
+            const result = await response.json();
+            if (result.status === 404 && result.message ==="User not found"){
+                alert('Người dùng không tồn tại.');
+            }else if (result.status === 404 && result.message ==="Book not found"){
+                alert('Sách không tồn tại.');
+            }else if (result.status === 400 && result.message === "Book is still available for borrowing; reservation is allowed only when stock is zero."){
+                alert('Số lượng sách vẫn còn hãy đi mượn.');
+            }else if(result.status === 400 && result.message === "Reservation already exists for this book and user."){
+                alert('Người dùng đã đặt sách này rồi.');
+            }else if(result.status === 400 && result.message ==="This book is already reserved by another user."){
+                alert('Sách đã được người khác đặt.');
+            }
             if (response.ok) {
                 // Reset form
                 setEmail('');
