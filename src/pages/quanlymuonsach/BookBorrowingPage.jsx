@@ -8,114 +8,27 @@ import EditButton from '../../components/editbutton.jsx';
 import DeleteButton from '../../components/deletebutton.jsx';
 import { FaBook } from 'react-icons/fa';
 import { jwtDecode } from 'jwt-decode'; // Correct import for jwtDecode
-import AddBorrowingForm from '../../components/addborrowingform'; // Import the AddBorrowingForm component
+import AddBorrowingForm from '../../components/addborrowingform';
 import ReturnBook from '../../components/returnbook.jsx';
 import PostNotificationButton from '../../components/PostNotificationButton.jsx';
-
+import EditBorrowingForm from '../../components/editborrowingform.jsx';
 const BookBorrowingPage = () => {
     const [borrowingData, setBorrowingData] = useState([]); // State to store borrowing data
-    const [showAddForm, setShowAddForm] = useState(false); // State to toggle the form visibility
+    const [showAddForm, setShowAddForm] = useState(false); // State to toggle Add Form visibility
+    const [showEditForm, setShowEditForm] = useState(false); // State to toggle Edit Form visibility
+    const [editData, setEditData] = useState(null); // Data for editing
 
     // Fetch borrowing data when the component is mounted
     useEffect(() => {
-        const fetchBorrowingData = async () => {
-            try {
-                const token = localStorage.getItem('accessToken'); // Lấy accessToken
-                if (token) {
-                    try {
-                        const decodedToken = jwtDecode(token);
-                        console.log('Decoded Token:', decodedToken);
-                        if (decodedToken.role !== 'ROLE_ADMIN') {
-                            alert('Bạn không có quyền truy cập vào trang này!');
-                            return;
-                        }
-                    } catch (error) {
-                        console.error('Lỗi khi giải mã token:', error);
-                        return;
-                    }
-                } else {
-                    console.error('Không tìm thấy token trong localStorage!');
-                    return;
-                }
-
-                console.log("Đang lấy dữ liệu...");
-                const response = await fetch('http://localhost:8083/api/v1/admin/book-lending/getall?page=0&size=10', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    console.error(`Lỗi trong phản hồi mạng: ${response.status} - ${response.statusText}`);
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const result = await response.json();
-                console.log("Dữ liệu đã lấy:", result);
-
-                // Cập nhật dữ liệu vào state
-                if (result.data && result.data.content) {
-                    setBorrowingData(result.data.content); // Set dữ liệu từ trường 'content'
-                } else {
-                    setBorrowingData([]); // Trường hợp không có dữ liệu
-                }
-            } catch (error) {
-                console.error('Lỗi khi lấy dữ liệu:', error);
-            }
-        };
-
         fetchBorrowingData();
-    }, []); // Chỉ chạy một lần khi component được mount
+    }, []);
 
-    const handleAddRequestClick = () => {
-        setShowAddForm(true); // Hiển thị form khi nhấn nút "Add Request"
-    };
-
-    const handleCloseAddForm = () => {
-        setShowAddForm(false); // Đóng form khi hủy
-    };
-
-    const handleDelete = async (id) => {
-      // Hiển thị hộp thoại xác nhận
-      const isConfirmed = window.confirm('Bạn có chắc chắn muốn xóa không?');
-      if (!isConfirmed) {
-          return; // Nếu người dùng chọn "Cancel", dừng lại không thực hiện hành động xóa
-      }
-  
-      const token = localStorage.getItem('accessToken'); // Lấy accessToken
-      if (!token) {
-          console.error('Không tìm thấy token trong localStorage!');
-          return;
-      }
-  
-      try {
-          const response = await fetch(`http://localhost:8083/api/v1/admin/book-lending/delete/${id}`, {
-              method: 'DELETE',
-              headers: {
-                  'Authorization': `Bearer ${token}`,
-                  'Content-Type': 'application/json'
-              }
-          });
-  
-          if (!response.ok) {
-              console.error(`Lỗi khi xóa: ${response.status} - ${response.statusText}`);
-              throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-  
-          console.log("Xóa thành công!");
-          // Cập nhật lại danh sách mượn sách sau khi xóa
-          refreshBorrowingList();
-      } catch (error) {
-          console.error('Lỗi khi gọi API DELETE:', error);
-      }
-  };
-
-    const refreshBorrowingList = () => {
-        // Refresh the borrowing list after adding a new borrowing request
-        const fetchBorrowingData = async () => {
+    const fetchBorrowingData = async () => {
+        try {
             const token = localStorage.getItem('accessToken');
+            if (!token) throw new Error('Không tìm thấy token trong localStorage!');
+            
+            console.log("Đang lấy danh sách mượn sách...");
             const response = await fetch('http://localhost:8083/api/v1/admin/book-lending/getall?page=0&size=10', {
                 method: 'GET',
                 headers: {
@@ -123,14 +36,108 @@ const BookBorrowingPage = () => {
                     'Content-Type': 'application/json'
                 }
             });
-            const result = await response.json();
-            if (result.data && result.data.content) {
-                setBorrowingData(result.data.content);
-            } else {
-                setBorrowingData([]);
+
+            if (!response.ok) {
+                console.error(`Lỗi trong phản hồi mạng: ${response.status} - ${response.statusText}`);
+                throw new Error(`HTTP error! Status: ${response.status}`);
             }
-        };
-        fetchBorrowingData();
+
+            const result = await response.json();
+            setBorrowingData(result.data?.content || []);
+        } catch (error) {
+            console.error('Lỗi khi lấy dữ liệu:', error);
+        }
+    };
+
+    const handleEditClick = async (id) => {
+        try {
+            const token = localStorage.getItem('accessToken');
+            if (!token) throw new Error('Không tìm thấy token trong localStorage!');
+            
+            console.log(`Đang lấy thông tin cho bản ghi với ID: ${id}`);
+            const response = await fetch(`http://localhost:8083/api/v1/admin/book-lending/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (!response.ok) {
+                console.error(`Lỗi khi lấy thông tin bản ghi: ${response.status} - ${response.statusText}`);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('dang lay du lieu',result)
+            setEditData(result.data); // Lưu thông tin bản ghi
+            setShowEditForm(true); // Hiển thị form chỉnh sửa
+        } catch (error) {
+            console.error('Lỗi khi gọi API GET:', error);
+        }
+    };
+
+    const handleEditSubmit = async (updatedData) => {
+        try {
+            const token = localStorage.getItem('accessToken');
+            if (!token) throw new Error('Không tìm thấy token trong localStorage!');
+        
+            // Ensure you are passing the correct lendingId from the updatedData
+            const { lendingId } = editData; // Assuming editData contains lendingId
+            console.log("Đang cập nhật dữ liệu...");
+        
+            const response = await fetch(`http://localhost:8083/api/v1/admin/book-lending/update/${lendingId}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedData) // Use updatedData here
+            });
+            const result = await response.json();
+            if (result.status === 404){
+                alert(result.message);
+            }
+            if (!response.ok) {
+                console.error(`Lỗi khi chỉnh sửa: ${response.status} - ${response.statusText}`);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+        
+            console.log('Chỉnh sửa thành công!');
+            setShowEditForm(false); // Đóng form chỉnh sửa
+            fetchBorrowingData(); // Làm mới danh sách
+        } catch (error) {
+            console.error('Lỗi khi gọi API PUT:', error);
+        }
+    };
+    
+    
+
+    const handleDelete = async (id) => {
+        if (!window.confirm('Bạn có chắc chắn muốn xóa không?')) return;
+
+        try {
+            const token = localStorage.getItem('accessToken');
+            if (!token) throw new Error('Không tìm thấy token trong localStorage!');
+            
+            console.log("Đang xóa...");
+            const response = await fetch(`http://localhost:8083/api/v1/admin/book-lending/delete/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                console.error(`Lỗi khi xóa: ${response.status} - ${response.statusText}`);
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            console.log("Xóa thành công!");
+            fetchBorrowingData(); // Làm mới danh sách
+        } catch (error) {
+            console.error('Lỗi khi gọi API DELETE:', error);
+        }
     };
 
     return (
@@ -143,19 +150,25 @@ const BookBorrowingPage = () => {
                             <SearchBar />
                             <PostNotificationButton />
                             <SortBy />
-                            <ReturnBook refreshBorrowingList={refreshBorrowingList} /> {/* Thêm ReturnBook */}
+                            <ReturnBook refreshBorrowingList={fetchBorrowingData} />
                         </div>
                         <div className="add-button">
-                            <AddButton label="ADD REQUEST" Icon={FaBook} onClick={handleAddRequestClick} />
+                            <AddButton label="ADD REQUEST" Icon={FaBook} onClick={() => setShowAddForm(true)} />
                         </div>
                     </div>
 
-                    {/* Hiển thị form AddBorrowingForm khi showAddForm là true */}
                     {showAddForm && (
                         <div className="modal-overlay">
-                            <AddBorrowingForm
-                                onClose={handleCloseAddForm}
-                                refreshBorrowingList={refreshBorrowingList}
+                            <AddBorrowingForm onClose={() => setShowAddForm(false)} refreshBorrowingList={fetchBorrowingData} />
+                        </div>
+                    )}
+
+                    {showEditForm && editData && (
+                        <div className="modal-overlay">
+                            <EditBorrowingForm
+                                data={editData}
+                                onSubmit={handleEditSubmit}
+                                onClose={() => setShowEditForm(false)}
                             />
                         </div>
                     )}
@@ -165,7 +178,7 @@ const BookBorrowingPage = () => {
                             <tr>
                                 <th>Borrowing ID</th>
                                 <th>Book ID</th>
-                                <th>User ID</th>
+                                <th>User</th>
                                 <th>Staff ID</th>
                                 <th>Due Date</th>
                                 <th>Return Date</th>
@@ -179,16 +192,16 @@ const BookBorrowingPage = () => {
                                 <tr key={index}>
                                     <td>{bookBorrow.lendingId}</td>
                                     <td>{bookBorrow.bookId}</td>
-                                    <td>{bookBorrow.userid}</td>
+                                    <td>{bookBorrow.email}</td>
                                     <td>{bookBorrow.staffid}</td>
                                     <td>{bookBorrow.dueDate}</td>
-                                    <td>{bookBorrow.returnDate ? bookBorrow.returnDate : "SÁCH CHƯA TRẢ"}</td>
+                                    <td>{bookBorrow.returnDate || "SÁCH CHƯA TRẢ"}</td>
                                     <td>{bookBorrow.creationDate}</td>
                                     <td>
-                                        <div className="action-buttons">
-                                            <EditButton label="EDIT" />
-                                            <DeleteButton label="DELETE" onClick={() => handleDelete(bookBorrow.lendingId)} />
-                                        </div>
+                                        <EditButton label="EDIT" onClick={() => handleEditClick(bookBorrow.lendingId)} />
+                                    </td>
+                                    <td>
+                                        <DeleteButton label="DELETE" onClick={() => handleDelete(bookBorrow.lendingId)} />
                                     </td>
                                 </tr>
                             ))}

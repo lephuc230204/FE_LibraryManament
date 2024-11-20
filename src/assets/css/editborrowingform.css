@@ -1,0 +1,81 @@
+.edit-borrowing-form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    position: relative; /* Keep the form as the reference point for absolute positioning */
+}
+
+.edit-borrowing-form {
+    background-color: #f7dada;
+    padding: 30px;
+    width: 300px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    position: relative; /* For absolute positioning of the close button */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers all form elements horizontally */
+}
+
+.edit-borrowing-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    width: 100%;
+}
+
+.edit-borrowing-form input[type="email"],
+.edit-borrowing-form input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    box-sizing: border-box;
+    margin-bottom: 14px;
+    font-size: 16px;
+}
+
+/* Styling for the submit button (Lưu) */
+.edit-borrowing-form .submit-button {
+    background-color: #008CBA;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 30%; /* Ensures the submit button takes the full width */
+}
+
+.edit-borrowing-form .submit-button:hover {
+    background-color: #006494;
+}
+
+.edit-borrowing-form .submit-button:disabled {
+    background-color: #ddd;
+    cursor: default;
+}
+
+/* Styling for the close button - position it at the top right */
+.edit-borrowing-form .close-button-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.edit-borrowing-form .close-button-container button {
+    background-color: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 5px;
+}
+
+.edit-borrowing-form .close-button-container button:hover {
+    color: #333;
+}
