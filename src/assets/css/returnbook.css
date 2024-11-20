@@ -19,10 +19,6 @@
     transition: background-color 0.3s ease;
 }
 
-.return-button:hover {
-    background-color: #006494;
-}
-
 /* Modal Overlay */
 .modal-overlay {
     position: fixed;
@@ -91,10 +87,6 @@
     font-size: 16px; /* Tăng kích thước chữ */
     font-weight: bold;
     transition: background-color 0.3s ease;
-}
-
-.return-form button:hover {
-    background-color: #006494;
 }
 
 /* Modal thông tin sách */

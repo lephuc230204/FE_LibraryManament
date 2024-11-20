@@ -25,15 +25,15 @@ const CreateReservationBook = ({ onClose, onUpdateReservationList }) => {
             });
             const result = await response.json();
             if (result.status === 404 && result.message ==="User not found"){
-                alert('Người dùng không tồn tại.');
+                alert(result.message);
             }else if (result.status === 404 && result.message ==="Book not found"){
-                alert('Sách không tồn tại.');
+                alert(result.message );
             }else if (result.status === 400 && result.message === "Book is still available for borrowing; reservation is allowed only when stock is zero."){
-                alert('Số lượng sách vẫn còn hãy đi mượn.');
+                alert(result.message );
             }else if(result.status === 400 && result.message === "Reservation already exists for this book and user."){
-                alert('Người dùng đã đặt sách này rồi.');
+                alert(result.message );
             }else if(result.status === 400 && result.message ==="This book is already reserved by another user."){
-                alert('Sách đã được người khác đặt.');
+                alert(result.message );
             }
             if (response.ok) {
                 // Reset form
@@ -53,7 +53,7 @@ const CreateReservationBook = ({ onClose, onUpdateReservationList }) => {
     return (
 
         <div className="create-reservation-book-container">
-            <h2 className="create-reservation-book-heading">Tạo Đặt Sách</h2>
+            <h2 className="create-reservation-book-heading">Add reservation book</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>Email:</label>
@@ -75,7 +75,7 @@ const CreateReservationBook = ({ onClose, onUpdateReservationList }) => {
                         required
                     />
                 </div>
-                <button type="submit" className="create-reservation-book-submit-btn">Đặt Sách</button>
+                <button type="submit" className="create-reservation-book-submit-btn">Accept</button>
             </form>
             <CloseButton onClick={onClose} className="create-reservation-book-close-btn" />
         </div>

@@ -5,8 +5,8 @@ const AddBorrowingForm = ({ onClose, refreshBorrowingList }) => {
     const [bookId, setBookId] = useState('');
     const [userId, setUserId] = useState('');
     const [dueDate, setDueDate] = useState('');
-    const [errorMessage, setErrorMessage] = useState(''); // Thêm state để lưu thông báo lỗi
-    const [showConfirmDialog, setShowConfirmDialog] = useState(false); // State để điều khiển hiển thị hộp thoại xác nhận
+    const [errorMessage, setErrorMessage] = useState('');
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
     // Hàm xử lý khi form được submit
     const handleSubmit = async (e) => {
@@ -17,12 +17,15 @@ const AddBorrowingForm = ({ onClose, refreshBorrowingList }) => {
     const handleConfirm = async () => {
         try {
             const token = localStorage.getItem('accessToken'); // Lấy token từ localStorage
-
+    
             if (!token) {
                 alert('Bạn cần đăng nhập trước khi thêm mượn sách!');
                 return;
             }
-
+    
+            // Chuyển đổi dueDate thành định dạng dd-MM-yyyy
+            const formattedDueDate = dueDate ? new Date(dueDate).toLocaleDateString('en-GB').replace(/\//g, '-') : ''; // Chuyển đổi thành dd-MM-yyyy
+    
             // Gọi API để thêm mượn sách
             const response = await fetch('http://localhost:8083/api/v1/admin/book-lending/add', {
                 method: 'POST',
@@ -30,23 +33,25 @@ const AddBorrowingForm = ({ onClose, refreshBorrowingList }) => {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ bookId, dueDate, email: userId }), // Gửi dữ liệu trong body
+                body: JSON.stringify({
+                    bookId,
+                    dueDate: formattedDueDate, // Gửi giá trị ngày theo định dạng dd-MM-yyyy
+                    email: userId
+                }),
             });
-
+    
             const responseData = await response.json(); // Lấy dữ liệu trả về từ API
-
-            // Kiểm tra nếu API trả về lỗi status 404
+    
             if (responseData.status === 404) {
                 setErrorMessage(responseData.message || 'Không tìm thấy thông tin.');
                 throw new Error(responseData.message || 'Không tìm thấy thông tin.');
             }
-
-            // Kiểm tra nếu API không thành công, ví dụ mã lỗi khác
+    
             if (!response.ok) {
                 setErrorMessage('Lỗi khi tạo BorrowingBook.');
                 throw new Error('Lỗi khi tạo BorrowingBook.');
             }
-
+    
             alert('Thêm mượn sách thành công!');
             refreshBorrowingList();  // Refresh danh sách sau khi thêm thành công
             onClose();  // Đóng form sau khi hoàn thành
@@ -54,6 +59,7 @@ const AddBorrowingForm = ({ onClose, refreshBorrowingList }) => {
             console.error('Lỗi khi thêm BorrowingBook:', error);
         }
     };
+    
 
     const handleCancel = () => {
         setShowConfirmDialog(false); // Đóng hộp thoại xác nhận nếu người dùng hủy
@@ -61,7 +67,6 @@ const AddBorrowingForm = ({ onClose, refreshBorrowingList }) => {
 
     return (
         <div className="add-borrowing-form">
-            <h2>Thêm Mượn Sách</h2>
             <form onSubmit={handleSubmit}>
                 {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Hiển thị thông báo lỗi nếu có */}
                 <div>
@@ -74,7 +79,7 @@ const AddBorrowingForm = ({ onClose, refreshBorrowingList }) => {
                     />
                 </div>
                 <div>
-                    <label>User ID (Email):</label>
+                    <label>Email:</label>
                     <input
                         type="email"
                         value={userId}
@@ -92,18 +97,18 @@ const AddBorrowingForm = ({ onClose, refreshBorrowingList }) => {
                     />
                 </div>
                 <div className="form-actions">
-                    <button type="submit">Thêm</button>
-                    <button type="button" onClick={onClose}>Hủy</button>
+                    <button type="submit">Add</button>
+                    <button type="button" onClick={onClose}>Cancel</button>
                 </div>
             </form>
 
             {/* Hiển thị hộp thoại xác nhận nếu showConfirmDialog là true */}
             {showConfirmDialog && (
                 <div className="confirm-dialog">
-                    <p>Bạn có chắc chắn muốn thêm mượn sách này?</p>
+                    <p>Are you sure you want to borrow more of this book?</p>
                     <div className="confirm-dialog-actions">
-                        <button onClick={handleConfirm}>Xác nhận</button>
-                        <button onClick={handleCancel}>Hủy</button>
+                        <button onClick={handleConfirm}>Confirm</button>
+                        <button onClick={handleCancel}>Cancel</button>
                     </div>
                 </div>
             )}

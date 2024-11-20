@@ -149,27 +149,52 @@ const ReturnBook = ({ refreshBorrowingList }) => {
                 </div>
             )}
 
-            {/* Hiển thị thông tin sách đã mượn trong modal */}
             {bookLendingDetails && (
                 <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h4>Thông tin sách đã trả:</h4>
-                        <div className="book-info">
-                            <div><strong>Lending ID:</strong> {bookLendingDetails.lendingId}</div>
-                            <div><strong>Book ID:</strong> {bookLendingDetails.bookId}</div>
-                            <div><strong>Tên sách:</strong> {bookLendingDetails.bookName}</div>
-                            <div><strong>Tác giả:</strong> {bookLendingDetails.author}</div>
-                            <div><strong>Ngày hết hạn:</strong> {new Date(bookLendingDetails.dueDate).toLocaleDateString()}</div>
-                            <div><strong>Ngày trả:</strong> {bookLendingDetails.returnDate ? new Date(bookLendingDetails.returnDate).toLocaleDateString() : "Chưa trả"}</div>
-                            <div><strong>User ID:</strong> {bookLendingDetails.userid}</div>
-                            <div><strong>Staff ID:</strong> {bookLendingDetails.staffid}</div>
+                    <div className="return-form">
+                        <h3>Thông tin sách đã trả:</h3>
+                        <div className="form-group">
+                            <label>Lending ID:</label>
+                            <div className="form-input">{bookLendingDetails.lendingId}</div>
                         </div>
-                        <div className="book-image">
-                            <strong>Hình ảnh:</strong>
-                            <img src={`http://localhost:8083/uploads/${bookLendingDetails.image}`} alt={bookLendingDetails.bookName} width="150" />
+                        <div className="form-group">
+                            <label>Book ID:</label>
+                            <div className="form-input">{bookLendingDetails.bookId}</div>
                         </div>
-                        <button className="close-modal" onClick={() => setBookLendingDetails(null)}>Đóng</button>
-                        <button className="confirm-return" onClick={handleConfirmReturn}>Confirm Return</button>
+                        <div className="form-group">
+                            <label>Tên sách:</label>
+                            <div className="form-input">{bookLendingDetails.bookName}</div>
+                        </div>
+                        <div className="form-group">
+                            <label>Tác giả:</label>
+                            <div className="form-input">{bookLendingDetails.author}</div>
+                        </div>
+                        <div className="form-group">
+                            <label>Ngày hết hạn:</label>
+                            <div className="form-input">{new Date(bookLendingDetails.dueDate).toLocaleDateString()}</div>
+                        </div>
+                        <div className="form-group">
+                            <label>Ngày trả:</label>
+                            <div className="form-input">{bookLendingDetails.returnDate ? new Date(bookLendingDetails.returnDate).toLocaleDateString() : "Chưa trả"}</div>
+                        </div>
+                        <div className="form-group">
+                            <label>User ID:</label>
+                            <div className="form-input">{bookLendingDetails.userid}</div>
+                        </div>
+                        <div className="form-group">
+                            <label>Staff ID:</label>
+                            <div className="form-input">{bookLendingDetails.staffid}</div>
+                        </div>
+                        <div className="form-group">
+                            <label>Hình ảnh:</label>
+                            <div className="book-image">
+                                <img src={`http://localhost:8083/uploads/${bookLendingDetails.image}`} alt={bookLendingDetails.bookName} width="150" />
+                            </div>
+                        </div>
+                        <div className="form-actions">
+                            <button className="close-modal" onClick={() => setBookLendingDetails(null)}>Đóng</button>
+                            <button className="confirm-return" onClick={handleConfirmReturn}>Confirm Return</button>
+                        </div>
                     </div>
                 </div>
             )}

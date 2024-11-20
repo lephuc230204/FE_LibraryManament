@@ -68,7 +68,7 @@ const EditBorrowingForm = ({ data, onSubmit, onClose }) => {
                         required
                     />
                 </label>
-                <button className="submit-button" type="submit">Lưu</button>
+                <button className="submit-button" type="submit">Save</button>
             </form>
         </div>
     );

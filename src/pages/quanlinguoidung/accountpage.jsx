@@ -128,14 +128,14 @@ const AccountPage = () => {
             <thead>
               <tr>
                 <th>ID</th>
-                <th>Tên</th>
+                <th>Name</th>
                 <th>Email</th>
-                <th>Số điện thoại</th>
-                <th>Vai trò</th>
-                <th>Ngày sinh</th>
-                <th>Trạng thái</th>
-                <th>Thẻ thư viện</th>
-                <th>Ngày tạo</th>
+                <th>Phone Number</th>
+                <th>Role</th>
+                <th>Birthday</th>
+                <th>Status</th>
+                <th>Card library</th>
+                <th>Create Date</th>
                 <th></th>
                 <th></th>
                 <th></th>

@@ -17,7 +17,11 @@ const BookBorrowingPage = () => {
     const [showAddForm, setShowAddForm] = useState(false); // State to toggle Add Form visibility
     const [showEditForm, setShowEditForm] = useState(false); // State to toggle Edit Form visibility
     const [editData, setEditData] = useState(null); // Data for editing
+    const [selectedImage, setSelectedImage] = useState(null);
 
+    const closeModal = () => {
+        setSelectedImage(null);
+    };
     // Fetch borrowing data when the component is mounted
     useEffect(() => {
         fetchBorrowingData();
@@ -139,7 +143,9 @@ const BookBorrowingPage = () => {
             console.error('Lỗi khi gọi API DELETE:', error);
         }
     };
-
+    const handleImageClick = (image) => {
+        setSelectedImage(image);
+    };  
     return (
         <div className="borrowing-page">
             <div className="borrowing-page-container">
@@ -172,13 +178,22 @@ const BookBorrowingPage = () => {
                             />
                         </div>
                     )}
-
+                    {selectedImage && (
+                        <div className="modal" onClick={closeModal}>
+                            <div className="modal-content">
+                                <img src={selectedImage} alt="Selected" className="modal-image" />
+                            </div>
+                        </div>
+                    )}
                     <table className="borrowing-table">
                         <thead>
                             <tr>
                                 <th>Borrowing ID</th>
                                 <th>Book ID</th>
-                                <th>User</th>
+                                <th>Image</th>
+                                <th>Book Name</th>
+                                <th>Author</th>
+                                <th>User Email</th>
                                 <th>Staff ID</th>
                                 <th>Due Date</th>
                                 <th>Return Date</th>
@@ -192,6 +207,19 @@ const BookBorrowingPage = () => {
                                 <tr key={index}>
                                     <td>{bookBorrow.lendingId}</td>
                                     <td>{bookBorrow.bookId}</td>
+                                    <td>
+                                        {bookBorrow.image ? (
+                                            <img
+                                                src={`http://localhost:8083/uploads/${bookBorrow.image}`}
+                                                alt={bookBorrow.bookName}
+                                                onClick={() => handleImageClick(`http://localhost:8083/uploads/${bookBorrow.image}`)} 
+                                            />
+                                        ) : (
+                                            "N/A"
+                                        )}
+                                    </td>
+                                    <td>{bookBorrow.bookName}</td>
+                                    <td>{bookBorrow.author}</td>
                                     <td>{bookBorrow.email}</td>
                                     <td>{bookBorrow.staffid}</td>
                                     <td>{bookBorrow.dueDate}</td>

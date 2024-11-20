@@ -95,7 +95,7 @@
       <div className="edit-book-form-container">
         <form className="edit-book-form" onSubmit={handleSubmit}>
           <label>
-            Tên sách:
+            BookName:
             <input
               type="text"
               name="bookName"
@@ -105,7 +105,7 @@
             />
           </label>
           <label>
-          Hình ảnh:
+          Image:
           {formData.image && (
               <img
               src={`http://localhost:8083/uploads/${formData.image}`}
@@ -121,7 +121,7 @@
           />
           </label>
           <label>
-            Số lượng:
+            Add quantity:
             <input
               type="number"
               name="quantity"
@@ -132,7 +132,7 @@
             />
           </label>
           <label>
-            Danh mục:
+            Category:
             <input
               type="text"
               name="categoryName"
@@ -142,7 +142,7 @@
             />
           </label>
           <label>
-            Tác giả:
+            Author:
             <input
               type="text"
               name="authorName"
@@ -152,7 +152,7 @@
             />
           </label>
           <label>
-            Nhà xuất bản:
+            Publisher:
             <input
               type="text"
               name="publisher"

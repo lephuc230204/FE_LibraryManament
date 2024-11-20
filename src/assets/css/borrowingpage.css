@@ -83,3 +83,8 @@
     background-color: #f8f8f8;
 }
 
+.borrowing-table img {
+    width: 100px; /* Set width of image */
+    height: 100px; /* Set height of image */
+    object-fit: cover; /* Ensures the image covers the container without distortion */
+}
